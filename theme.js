@@ -11,37 +11,61 @@ function random(min, max) {
   return Math.random() * (max - min) + min;
 }
 
-waitForElement(['.Root__top-container'], ([topContainer]) => {
+waitForElement([".Root__top-container"], ([topContainer]) => {
   const r = document.documentElement;
   const rs = window.getComputedStyle(r);
 
-  // Clean up any canvas if present
-  const oldCanvas = document.querySelector('.starrynight-canvas');
-  if (oldCanvas) oldCanvas.remove();
+  const backgroundContainer = document.createElement("div");
+  backgroundContainer.className = "starrynight-bg-container";
+  topContainer.appendChild(backgroundContainer);
 
-  // Background container
-  let backgroundContainer = document.querySelector('.starrynight-bg-container');
-  if (!backgroundContainer) {
-    backgroundContainer = document.createElement('div');
-    backgroundContainer.className = 'starrynight-bg-container';
-    topContainer.appendChild(backgroundContainer);
-  } else {
-    backgroundContainer.innerHTML = '';
-  }
+  // to position stars and shooting stars between the background and everything else
+  const rootElement = document.querySelector(".Root__top-container");
+  rootElement.style.zIndex = "0";
 
-  const rootElement = document.querySelector('.Root__top-container');
-  if (rootElement) {
-    rootElement.style.zIndex = '0';
-  }
-
-  // 1. Original Delroy Prithvi Starry Sky with Full Star Density
-  // (Rendered using DocumentFragment for instant zero-lag DOM insertion)
-  const fragment = document.createDocumentFragment();
-  const starColor = rs.getPropertyValue('--spice-star') || '#ffffff';
+  // create the stars
   const canvasSize =
-    (backgroundContainer.clientWidth && backgroundContainer.clientHeight)
-      ? backgroundContainer.clientWidth * backgroundContainer.clientHeight
-      : window.innerWidth * window.innerHeight;
+    backgroundContainer.clientWidth * backgroundContainer.clientHeight;
+  const starsFraction = canvasSize / 4000;
+  for (let i = 0; i < starsFraction; i++) {
+    const size = Math.random() < 0.5 ? 1 : 2;
+
+    const star = document.createElement("div");
+    star.style.position = "absolute";
+    star.style.left = `${random(0, 99)}%`;
+    star.style.top = `${random(0, 99)}%`;
+    star.style.opacity = random(0.5, 1);
+    star.style.width = `${size}px`;
+    star.style.height = `${size}px`;
+    star.style.backgroundColor = rs.getPropertyValue("--spice-star");
+    star.style.zIndex = "-1";
+    star.style.borderRadius = "50%";
+
+    if (Math.random() < 1 / 5) {
+      star.style.setProperty(
+        "animation",
+        `twinkle${Math.floor(Math.random() * 4) + 1} 5s infinite`,
+        "important",
+      );
+    }
+
+    backgroundContainer.appendChild(star);
+  }
+
+  // handles resizing of playbar panel to match right sidebar below it
+  topContainer = document.querySelector(".Root__top-container");
+  const rightSidebarSlot = [...topContainer.children].find((el) =>
+    getComputedStyle(el).gridArea.includes("right-sidebar"),
+  );
+  if (rightSidebarSlot) {
+    new ResizeObserver(([entry]) => {
+      const w = Math.round(entry.contentRect.width);
+      if (w === 0)
+        topContainer.style.removeProperty("--starrynight-panel-width");
+      else
+        topContainer.style.setProperty("--starrynight-panel-width", `${w}px`);
+    }).observe(rightSidebarSlot);
+  }
 
   // Full original star density (~350 to 500 stars across the entire sky)
   const starsFraction = Math.floor(canvasSize / 4200);
@@ -73,11 +97,22 @@ waitForElement(['.Root__top-container'], ([topContainer]) => {
     { top: '45%', right: '-4px', dur: '4.2s', delay: '3.8s' },
   ];
 
-  shootingConfigs.forEach((cfg) => {
-    const shootingstar = document.createElement('span');
-    shootingstar.className = 'shootingstar';
-    shootingstar.style.top = cfg.top;
-    shootingstar.style.right = cfg.right;
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  */
+  for (let i = 0; i < 4; i++) {
+    const shootingstar = document.createElement("span");
+    shootingstar.className = "shootingstar";
+    if (Math.random() < 0.75) {
+      shootingstar.style.top = "-4px"; // hidden off screen when animation is delayed
+      shootingstar.style.right = `${random(0, 90)}%`;
+    } else {
+      shootingstar.style.top = `${random(0, 50)}%`;
+      shootingstar.style.right = "-4px"; // hidden when animation is delayed
+    }
+
+    const shootingStarGlowColor = `rgba(${rs.getPropertyValue(
+      "--spice-rgb-shooting-star-glow",
+    )},${0.1})`;
     shootingstar.style.boxShadow = `0 0 0 4px ${shootingStarGlowColor}, 0 0 0 8px ${shootingStarGlowColor}, 0 0 20px ${shootingStarGlowColor}`;
     shootingstar.style.setProperty('animation-duration', cfg.dur, 'important');
     shootingstar.style.setProperty('animation-delay', cfg.delay, 'important');
@@ -94,13 +129,16 @@ waitForElement(['.Root__top-container'], ([topContainer]) => {
       '.Root__right-sidebar, aside#Desktop_PanelContainer_Id, [data-testid="right-sidebar"]'
     );
 
-    if (rightSidebarSlot) {
-      let rafPending = false;
-      let lastWidth = -1;
+    shootingstar.addEventListener("animationend", () => {
+      if (Math.random() < 0.75) {
+        shootingstar.style.top = "-4px"; // hidden off screen when animation is delayed
+        shootingstar.style.right = `${random(0, 90)}%`;
+      } else {
+        shootingstar.style.top = `${random(0, 50)}%`;
+        shootingstar.style.right = "-4px"; // hidden when animation is delayed
+      }
 
-      const updateWidth = (w) => {
-        if (w === lastWidth || Math.abs(w - lastWidth) < 2) return;
-        lastWidth = w;
+      shootingstar.style.animation = "none"; // Remove animation
 
         if (w < 200) {
           document.body.classList.add('starrynight-sidebar-collapsed');
@@ -111,42 +149,14 @@ waitForElement(['.Root__top-container'], ([topContainer]) => {
         }
       };
 
-      const ro = new ResizeObserver(([entry]) => {
-        const w = Math.round(entry.contentRect.width);
-        if (!rafPending) {
-          rafPending = true;
-          requestAnimationFrame(() => {
-            rafPending = false;
-            updateWidth(w);
-          });
-        }
-      });
-      ro.observe(rightSidebarSlot);
-    } else {
-      setTimeout(setupResizeObserver, 500);
-    }
-  };
-  setupResizeObserver();
-
-  // 4. Handle play/pause state for spinning cover art
-  const setupPlayStateObserver = () => {
-    if (window.Spicetify && Spicetify.Player) {
-      const updatePlaying = () => {
-        const isPlaying = Spicetify.Player.isPlaying();
-        if (isPlaying) {
-          document.body.classList.add('starrynight-is-playing');
-        } else {
-          document.body.classList.remove('starrynight-is-playing');
-        }
-      };
-      Spicetify.Player.addEventListener('onplaypause', updatePlaying);
-      Spicetify.Player.addEventListener('songchange', () => setTimeout(updatePlaying, 100));
-      updatePlaying();
-    } else {
-      setTimeout(setupPlayStateObserver, 300);
-    }
-  };
-  setupPlayStateObserver();
+      shootingstar.style.animation = "";
+      shootingstar.style.setProperty(
+        "animation-duration",
+        `${Math.floor(Math.random() * 4) + 3}s`,
+        "important",
+      );
+    });
+  }
 });
 
 
