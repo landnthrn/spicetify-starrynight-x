@@ -1,3 +1,11 @@
+/* Shared theme settings. Color palettes are defined in color.ini. */
+:root {
+  /* Set a solid menu background and blur: none to disable the glass effect.
+     Use var(--spice-context-menu-color) for a scheme-specific menu color. */
+  --theme-context-menu-background: transparent;
+  --theme-context-menu-blur: blur(24px);
+}
+
 .os-scrollbar {
   --os-handle-border-radius: 16px !important;
   --os-size: 8px !important;
@@ -810,3 +818,30 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   }
 }
 
+/* Use a backdrop pseudo-element without changing menu positioning or overflow,
+   which are required for nested submenus. */
+ul[role="menu"],
+form:has(> ul[role="menu"]) {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Reuse Spotify's existing positioned wrapper for a non-interactive visual layer. */
+ul[role="menu"]::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 8px;
+  pointer-events: none;
+  background-color: var(--theme-context-menu-background, transparent);
+  -webkit-backdrop-filter: var(--theme-context-menu-blur, blur(24px));
+  backdrop-filter: var(--theme-context-menu-blur, blur(24px));
+}
+
+/* Keep Add to Playlist's Cancel footer transparent so the shared menu
+   backdrop shows through in both blur and solid-color modes. */
+form:has(> ul[role="menu"]) > div:has(> button) {
+  background-color: transparent !important;
+  background-image: none !important;
+}
