@@ -476,6 +476,7 @@ body.starrynight-is-playing [data-testid="now-playing-bar"] [data-testid="cover-
 
 [data-testid="now-playing-bar"] .playback-bar {
   order: 1;
+  transform: translateY(-12px) !important;
 }
 
 [data-testid="now-playing-bar"] .player-controls__left,
@@ -484,15 +485,13 @@ body.starrynight-is-playing [data-testid="now-playing-bar"] [data-testid="cover-
   justify-content: center;
 }
 
-[data-testid="now-playing-bar"] [data-testid="control-button-playpause"],
-.main-playPauseButton-button {
+[data-testid="now-playing-bar"] [data-testid="control-button-playpause"] {
   background-color: var(--spice-button) !important;
   color: #000000 !important;
   border-radius: 50% !important;
 }
 
-[data-testid="now-playing-bar"] [data-testid="control-button-playpause"] svg,
-.main-playPauseButton-button svg {
+[data-testid="now-playing-bar"] [data-testid="control-button-playpause"] svg {
   fill: #000000 !important;
   color: #000000 !important;
 }
