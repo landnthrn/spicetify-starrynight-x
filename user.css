@@ -728,3 +728,85 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
 }
 
 
+/* Downpurp-specific styles, selected through the color.ini marker. */
+@container style(--spice-downpurp-marker: #010101) {
+  
+  aside button[aria-label*="Expand"],
+  aside button[aria-label*="Expandir"],
+  aside button[aria-label*="Mostrar"] {
+    background: rgba(var(--spice-rgb-highlight, 133, 84, 240), 0.12) !important;
+    color: var(--spice-text, #ffffff) !important;
+  }
+
+  aside button[aria-label*="Expand"]:hover,
+  aside button[aria-label*="Expandir"]:hover,
+  aside button[aria-label*="Mostrar"]:hover {
+    background: rgba(var(--spice-rgb-highlight, 133, 84, 240), 0.25) !important;
+  }
+
+  /* Downpurp control and icon colors. */
+  aside button,
+  aside [role="button"],
+  .Root__top-container aside button,
+  .Root__top-container [data-testid="now-playing-bar"] button:not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]),
+  .main-nowPlayingBar-extraControls button,
+  .player-controls__buttons button:not([data-testid="control-button-playpause"]),
+  button[aria-label*="Estás escuchando"],
+  button[aria-label*="Now Playing"],
+  button[aria-label*="Now playing"],
+  button[aria-label*="ahora suena"],
+  button[aria-label*="Ocultar"] {
+    color: var(--spice-text, #ffffff) !important;
+  }
+
+  aside button svg,
+  aside [role="button"] svg,
+  .Root__top-container aside button svg,
+  .Root__top-container [data-testid="now-playing-bar"] button:not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]) svg,
+  .main-nowPlayingBar-extraControls button svg,
+  .player-controls__buttons button:not([data-testid="control-button-playpause"]) svg,
+  button[aria-label*="Estás escuchando"] svg,
+  button[aria-label*="Now Playing"] svg,
+  button[aria-label*="Now playing"] svg,
+  button[aria-label*="ahora suena"] svg,
+  button[aria-label*="Expand"] svg,
+  button[aria-label*="Expandir"] svg,
+  button[aria-label*="Ocultar"] svg {
+    fill: var(--spice-text, #ffffff) !important;
+    color: var(--spice-text, #ffffff) !important;
+  }
+
+  aside button:hover,
+  aside [role="button"]:hover,
+  .main-nowPlayingBar-extraControls button:hover {
+    background-color: rgba(var(--spice-rgb-highlight, 133, 84, 240), 0.2) !important;
+  }
+
+  aside .main-nowPlayingView-trackInfo *,
+  aside [data-testid="now-playing-view-track-info"] * {
+    color: var(--spice-text, #ffffff) !important;
+  }
+
+  
+  .view-homeShortcutsGrid-shortcut:hover,
+  [role="row"]:hover {
+    background-color: rgba(var(--spice-rgb-highlight, 133, 84, 240), 0.08) !important;
+  }
+
+  
+  [data-testid="now-playing-bar"] [data-testid="cover-art-button"] img {
+    box-shadow: 0 0 10px 3px var(--spice-star-glow, #ffffff),
+                0 0 4px 1px rgba(var(--spice-rgb-star-glow, 255, 255, 255), 0.4) !important;
+  }
+
+  /* Downpurp search, navigation, and library backgrounds. */
+  .main-topBar-searchBar,
+  input[data-top-bar-search="true"],
+  .main-globalNav-navLink,
+  .main-globalNav-navLinkActive,
+  button[aria-label*="Create"],
+  .main-yourLibraryX-libraryHeader .main-yourLibraryX-button {
+    background-color: #150e26 !important;
+  }
+}
+
