@@ -1,5 +1,8 @@
 /* Shared theme settings. Color palettes are defined in color.ini. */
 :root {
+  /* Native artwork gradients: 0 = hidden, 1 = visible. */
+  --theme-color-banners-enabled: 1;
+
   /* Set a solid menu background and blur: none to disable the glass effect.
      Use var(--spice-context-menu-color) for a scheme-specific menu color. */
   --theme-context-menu-background: transparent;
@@ -239,7 +242,7 @@ body.starrynight-sidebar-collapsed .Root__top-container,
 }
 
 
-/* Clean, high-performance transparency for main view without scanning child track rows */
+/* Main-view transparency without descendant-wide selectors. */
 :root,
 .encore-dark-theme,
 .encore-layout-themes {
@@ -263,26 +266,11 @@ body.starrynight-sidebar-collapsed .Root__top-container,
 .main-view-container,
 .main-view-container__scroll-node,
 .main-view-container__scroll-node-child,
-.main-actionBarBackground-background,
-.main-entityHeader-backgroundColor,
-.main-entityHeader-background,
-.main-entityHeader-overlay,
-.main-entityHeader-container,
-.main-entityHeader-headerText,
-.under-main-view,
-[data-testid="entityHeader"],
-[data-testid="action-bar-background"],
-.main-entityHeader-background.main-entityHeader-gradient,
-.main-entityHeader-background.main-entityHeader-overlay,
-.main-home-homeHeader,
 [data-testid="home-page"],
 .main-home-content,
 [data-testid="playlist-page"],
 [data-testid="artist-page"],
-[data-testid="album-page"],
-[data-testid="playlist-page"] > div,
-[data-testid="album-page"] > div,
-[data-testid="artist-page"] > div {
+[data-testid="album-page"] {
   background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
@@ -293,13 +281,7 @@ body.starrynight-sidebar-collapsed .Root__top-container,
   --bgColor: transparent !important;
 }
 
-/* Dynamic extracted album color variable overrides (eliminates red/colored solid banners) */
-[style*="--bgColor"] {
-  --bgColor: transparent !important;
-  background-color: transparent !important;
-}
-
-.Root__top-container [style*="--background-base"]:not(.e-10860-legacy-box):not(.e-10860-legacy-box *),
+.Root__top-container [style*="--background-base"]:not(.e-10860-legacy-box):not(.e-10860-legacy-box *):not(:is([data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper), .r8bczAWCEgb9_L0iyIcc, .IfBZ5VdI_2nwDMl4H6Yh)),
 .Root__top-container [style*="--background-base"]:not(.e-10860-legacy-box):not(.e-10860-legacy-box *)::after {
   background-color: transparent !important;
   background-image: none !important;
@@ -461,7 +443,17 @@ body.starrynight-sidebar-collapsed .Root__top-container,
   backface-visibility: hidden;
 }
 
+/* Draw stars above artwork gradients without intercepting pointer events. */
+.Root__top-container > .starrynight-bg-container {
+  z-index: 30 !important;
+  pointer-events: none !important;
+}
 
+.starrynight-bg-container > .starrynight-star,
+.starrynight-bg-container > .shootingstar {
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
 
 [data-testid="now-playing-bar"] {
   min-height: max(450px, var(--starrynight-panel-width, 420px));
@@ -592,16 +584,6 @@ body.starrynight-is-playing [data-testid="now-playing-bar"] [data-testid="cover-
   .main-nowPlayingWidget-nowPlaying
   > :not([data-testid="CoverSlotCollapsed__container"]) {
   margin-block: 10px 0;
-}
-
-[data-testid="artist-page"] > div > div {
-  background-color: transparent !important;
-  background-image: none !important;
-}
-
-[data-testid="playlist-page"] > div {
-  background-color: transparent !important;
-  background-image: none !important;
 }
 
 .LayoutResizer__resize-bar,
@@ -816,6 +798,78 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   .main-yourLibraryX-libraryHeader .main-yourLibraryX-button {
     background-color: #150e26 !important;
   }
+}
+
+/* Native banner visibility: playlists, albums, podcasts, artists */
+
+/* Let Spotify's native banner gradients show through the scroll surfaces, action bar,
+   and playlist toolbar. Disabled layers are fully masked, revealing StarryNight's sky. */
+#main-view:has([data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper)):has(.r8bczAWCEgb9_L0iyIcc)
+  :is(.main-view-container,
+      .main-view-container__scroll-node,
+      .main-view-container__scroll-node-child,
+      .playlist-playlist-playlistContent,
+      .main-actionBar-ActionBar,
+      .playlist-playlist-playlistContent > .contentSpacing) {
+  background-color: transparent !important;
+}
+
+/* Mask the native artwork and lower-gradient layers using their existing targets.
+   Alpha mask: 0 hides the layers; 1 reveals Spotify's original colors. */
+#main-view:has([data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper)):has(.r8bczAWCEgb9_L0iyIcc)
+  :is([data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper), .r8bczAWCEgb9_L0iyIcc) {
+  -webkit-mask-image: linear-gradient(
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)),
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0))
+  ) !important;
+  mask-image: linear-gradient(
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)),
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0))
+  ) !important;
+  mask-mode: alpha !important;
+}
+
+/* Liked Songs and Your Episodes banner visibility */
+
+/* Both pages use the same native banner layers, but different page containers.
+   Use the distinctive lower gradient to scope their shared transparency rules. */
+#main-view:has(.IfBZ5VdI_2nwDMl4H6Yh)
+  :is(.main-view-container,
+      .main-view-container__scroll-node,
+      .main-view-container__scroll-node-child,
+      .main-actionBar-ActionBar) {
+  background-color: transparent !important;
+}
+
+/* Hide or reveal both upper artwork layers with the CSS opacity setting. */
+#main-view:has(.IfBZ5VdI_2nwDMl4H6Yh)
+  [data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper) {
+  -webkit-mask-image: linear-gradient(
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)),
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0))
+  ) !important;
+  mask-image: linear-gradient(
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)),
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0))
+  ) !important;
+  mask-mode: alpha !important;
+}
+
+/* When enabled, fade the lower gradient smoothly into StarryNight's sky.
+   When disabled, the zero-alpha mask makes it completely transparent. */
+#main-view:has(.IfBZ5VdI_2nwDMl4H6Yh)
+  .IfBZ5VdI_2nwDMl4H6Yh {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)) 0%,
+    transparent 100%
+  ) !important;
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)) 0%,
+    transparent 100%
+  ) !important;
+  mask-mode: alpha !important;
 }
 
 /* Use a backdrop pseudo-element without changing menu positioning or overflow,
