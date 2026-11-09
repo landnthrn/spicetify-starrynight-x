@@ -44,7 +44,6 @@
 .main-topBar-container,
 .main-topBar-background,
 .main-topBar-overlay,
-.Root__top-bar,
 [data-testid="topbar"] {
   background-color: transparent !important;
   background: transparent !important;
@@ -671,6 +670,131 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   background: transparent !important;
   -webkit-backdrop-filter: blur(24px) !important;
   backdrop-filter: blur(24px) !important;
+}
+
+/* Overlap the top-bar and track-header blurs without shifting their content. */
+
+/* Keep the stars behind the headers. */
+#main-view {
+  z-index: 1 !important;
+}
+
+/* Extend the 64px top bar to 88px without moving its controls. */
+#main-view > header[data-testid="topbar"] {
+  box-sizing: border-box !important;
+  height: 88px !important;
+  padding-bottom: 24px !important;
+  contain: none !important;
+  z-index: auto !important;
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Blur the native top-bar background and feather its bottom edge. */
+#main-view > header[data-testid="topbar"] > div[style*="--background-base"] {
+  height: 100% !important;
+  z-index: 5 !important;
+  --background-base: transparent !important;
+  background: transparent !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-mask-image: linear-gradient(to bottom, black 0, black calc(100% - 22px), transparent 100%) !important;
+  mask-image: linear-gradient(to bottom, black 0, black calc(100% - 22px), transparent 100%) !important;
+}
+
+#main-view > header[data-testid="topbar"] > div[style*="--background-base"] > div {
+  background: transparent !important;
+}
+
+/* Keep the top-bar controls above both blur layers. */
+#main-view > header[data-testid="topbar"] > .contentSpacing {
+  position: relative !important;
+  z-index: 20 !important;
+}
+
+/* Extend the 37px track header upward by 24px without moving its text. */
+.main-view-container__scroll-node-child
+[data-scroll-size-invariant-class][role="presentation"]:has(> [role="presentation"] > [role="row"] > [role="columnheader"]) {
+  box-sizing: border-box !important;
+  height: 61px !important;
+  margin-top: -24px !important;
+  padding-top: 24px !important;
+  top: 40px !important;
+  z-index: 10 !important;
+  background: transparent !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+}
+
+/* Blur the track header, fading in across its top 22px. */
+.main-view-container__scroll-node-child
+[data-scroll-size-invariant-class][role="presentation"]:has(> [role="presentation"] > [role="row"] > [role="columnheader"])::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  z-index: -1;
+  pointer-events: none !important;
+  background: transparent !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 22px) !important;
+  mask-image: linear-gradient(to bottom, transparent 0, black 22px) !important;
+}
+
+/* Fade the lower blur as the track header becomes sticky.
+   Fall back to the sticky-state class where scroll timelines are unavailable. */
+.main-view-container__scroll-node-child
+[data-scroll-size-invariant-class][role="presentation"]:has(> [role="presentation"] > [role="row"] > [role="columnheader"])::before {
+  opacity: 0;
+  transition: opacity 200ms linear;
+}
+
+.main-view-container__scroll-node-child
+[data-scroll-size-invariant-class][role="presentation"].iPo4a2lbrsxW9Iedav3h:has(> [role="presentation"] > [role="row"] > [role="columnheader"])::before {
+  opacity: 1;
+}
+
+@keyframes starrynight-lower-sticky-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Track the grid so the fade continues when the header stops scrolling.
+   The 103px inset combines the 40px sticky offset, 23px gap, and 40px fade. */
+@supports (view-timeline-inset: 0px calc(100% - 103px)) and (animation-timeline: --starrynight-lower-sticky) {
+  .main-view-container__scroll-node-child
+  [role="grid"]:has(> [data-scroll-size-invariant-class][role="presentation"] > [role="presentation"] > [role="row"] > [role="columnheader"]) {
+    view-timeline-name: --starrynight-lower-sticky;
+    view-timeline-axis: block;
+    view-timeline-inset: 0px calc(100% - 103px);
+  }
+
+  .main-view-container__scroll-node-child
+  [data-scroll-size-invariant-class][role="presentation"]:has(> [role="presentation"] > [role="row"] > [role="columnheader"])::before {
+    animation: starrynight-lower-sticky-fade 1s linear both !important;
+    animation-timeline: --starrynight-lower-sticky !important;
+    animation-range: cover 0px cover 40px !important;
+    transition: none !important;
+  }
+}
+
+/* Release the scrollport stacking context without raising the whole scroller. */
+.main-view-container__scroll-node > :has(> .main-view-container__scroll-node-child) {
+  z-index: auto !important;
+  will-change: scroll-position !important;
+}
+
+/* Keep this selector separate to avoid nested :has() expressions. */
+.main-view-container__scroll-node-child {
+  isolation: auto !important;
+}
+
+/* Release the playlist wrapper isolation only when a track header is present. */
+.main-view-container__scroll-node-child > main > section:has(
+  [data-scroll-size-invariant-class][role="presentation"] > [role="presentation"] > [role="row"] > [role="columnheader"]
+) > div {
+  isolation: auto !important;
 }
 
 /* Downpurp-specific styles, selected through the color.ini marker. */
