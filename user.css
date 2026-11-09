@@ -1,113 +1,99 @@
+/* Shared theme settings. Color palettes are defined in color.ini. */
+:root {
+  /* Native artwork gradients: 0 = hidden, 1 = visible. */
+  --theme-color-banners-enabled: 1;
+
+  /* Set a solid menu background and blur: none to disable the glass effect.
+     Use var(--spice-context-menu-color) for a scheme-specific menu color. */
+  --theme-context-menu-background: transparent;
+  --theme-context-menu-blur: blur(24px);
+}
+
 .os-scrollbar {
   --os-handle-border-radius: 16px !important;
   --os-size: 8px !important;
 }
 
-.main-entityHeader-backgroundColor {
-  background-color: #00000000 !important;
-}
-
-.main-home-homeHeader {
-  background-color: #00000000 !important;
-  background-image: none !important;
-}
-
-/* ---------- layout ---------- */
-
-/* the sky */
-.starrynight-top-container {
-  background: linear-gradient(180deg, var(--spice-sidebar-alt) 0%, var(--spice-sidebar) 100%) !important;
+:is(.starrynight-top-container, .Root__top-container) {
+  background: linear-gradient(
+    180deg,
+    var(--spice-sidebar-alt) 0%,
+    var(--spice-sidebar) 100%
+  ) !important;
   overflow: hidden;
-  /* playbar moves to the top of the right column, above the right sidebar */
-  grid-template:
-    "top-banner   top-banner top-banner"      auto
-    "global-nav   global-nav global-nav"      auto
-    "left-sidebar main-view  now-playing-bar" auto
-    "left-sidebar main-view  right-sidebar"   1fr
-    / auto 1fr auto !important;
+  /* Retain the three-row layout across modern and legacy root containers. */
+  grid-template-areas:
+    "top-banner global-nav global-nav"
+    "left-sidebar main-view now-playing-bar"
+    "left-sidebar main-view right-sidebar" !important;
+  grid-template-columns: auto 1fr auto !important;
+  grid-template-rows: auto auto 1fr !important;
 }
 
-/* overlays/popovers used to end at the (old, bottom) playbar row; span everything instead */
+/* Span overlay portals across the content rows without changing menu positioning. */
 .starrynight-top-container > div:has(> #floating-ui-popover-layer),
 .starrynight-top-container > div:has(> .VTO__modal-slot) {
   grid-row: 2 / -1 !important;
 }
 
-.starrynight-top-container > .Root__lyrics-cinema,
-.starrynight-top-container > #lyrics-cinema {
+/* The fullscreen lyrics cinema spans the entire root, including navigation. */
+.starrynight-top-container > :is(.Root__lyrics-cinema, #lyrics-cinema) {
   grid-row: 1 / -1 !important;
 }
 
+:is(.starrynight-top-container, .Root__top-container) > :has([data-testid="now-playing-bar"]) {
+  margin: 0;
+  padding: 0;
+  background: none;
+  border-radius: 8px;
+  overflow: visible !important;
+}
+
+/* Prefer Spotify's stable navigation ID; retain the legacy class fallback. */
 #global-nav-bar,
+.Root__globalNav {
+  background-color: transparent !important;
+}
+
+/* Scope library-panel transparency to its stable Spotify container ID. */
 #Desktop_LeftSidebar_Id,
-#Desktop_LeftSidebar_Id nav > div,
-#Desktop_LeftSidebar_Id .YourLibraryX,
-#main-view,
-.starrynight-rightbar,
-.starrynight-rightbar .Root__right-sidebar-peek,
-.starrynight-playbar {
-  background: #00000000 !important;
-}
-
-/* right sidebar panels (queue, now playing view...) were opaque black */
-.starrynight-rightbar aside,
-.starrynight-rightbar aside::before,
-.starrynight-rightbar aside::after,
-.starrynight-rightbar .Root__right-sidebar-overlayWrapper > div:not(.Root__right-sidebar-peekContent),
-.starrynight-rightbar .Root__right-sidebar-fauxMainViewEnd > div {
-  background: #00000000 !important;
-}
-
-/* collapsed sidebar: the (now transparent) strip used to cover the peeking content */
-.starrynight-rightbar .Root__right-sidebar-peek:not(.Root__right-sidebar-expanded):not(:hover)
-  .Root__right-sidebar-peekContent {
-  opacity: 0;
-}
-
-/* all StarryNight schemes use a light button color, so primary buttons need dark text
-   (e.g. Full Screen's "Switch to TV Mode" / "Exit" were white on cream) */
-.main-button-primary {
-  color: #000000 !important;
-}
-
-/* page headers / action bars are painted with the cover art color (playlist, album, artist) */
-[data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper),
-.playlist-playlist-playlistContent > div:first-child,
-[data-testid$="-page"] > [data-testid="entity-header"] + div,
-[data-testid="artist-page"] [data-testid="entity-header"] + div,
-[data-testid="artist-page"] [data-testid="entity-header"] + div > div:first-child,
-[data-testid="overscroll-background"] {
-  background-color: #00000000 !important;
+#Desktop_LeftSidebar_Id nav > div {
+  background-color: transparent !important;
   background-image: none !important;
 }
 
-/* keep main view out of the playbar column even when the right sidebar is closed */
+/* The main-view shell is transparent; the native banner layers inside it
+   still obey --theme-color-banners-enabled and their existing alpha masks. */
 #main-view {
-  grid-column: main-view !important;
+  background-color: transparent !important;
 }
 
-.starrynight-rightbar {
-  min-height: 0;
+.main-topBar-container,
+.main-topBar-background,
+.main-topBar-overlay,
+[data-testid="topbar"] {
+  background-color: transparent !important;
+  background: transparent !important;
+  --background-base: transparent !important;
 }
 
-/* ---------- misc transparency (some hashed classes may be stale on newer Spotify) ---------- */
 
-.ffFwfKcPDbmAPLXzxzKq:before {
-  background-color: #00000000 !important;
+:is(.starrynight-top-container, .Root__top-container) > :has(.main-view-container) {
+  background-color: transparent !important;
 }
 
-.Root__top-container > :has(.YourLibraryX),
-.Root__top-container > :has(.YourLibraryX) > *,
-.Root__top-container > :has(.YourLibraryX) *:has(.YourLibraryX),
+:is(.starrynight-top-container, .Root__top-container) > :has(.YourLibraryX),
+:is(.starrynight-top-container, .Root__top-container) > :has(.YourLibraryX) > *,
+:is(.starrynight-top-container, .Root__top-container) > :has(.YourLibraryX) *:has(.YourLibraryX),
 .YourLibraryX {
   background-color: transparent !important;
   background-image: none !important;
 }
 
-.Root__top-container
+:is(.starrynight-top-container, .Root__top-container)
   [aria-label="Now playing view"]
   > div
-  > div:has(button[aria-label="Hide Now Playing view"]) {
+  > div:has(button[aria-label*="Now Playing view"], button[aria-label*="ahora suena"]) {
   background: linear-gradient(
     to bottom,
     rgba(0, 0, 0, 0.55) 0%,
@@ -115,141 +101,272 @@
   ) !important;
 }
 
-.Root__top-container
+:is(.starrynight-top-container, .Root__top-container)
   [aria-label="Now playing view"]
   > div
-  > div:has(button[aria-label="Hide Now Playing view"])
+  > div:has(button[aria-label*="Now Playing view"], button[aria-label*="ahora suena"])
   > div:has(a) {
   padding-inline-end: 72px;
   box-sizing: border-box;
 }
 
-.Root__right-sidebar-fauxMainViewEnd > *,
+/* Clear the actual right-sidebar slot and Spotify's opaque layers.
+   Keep the legacy measured wrapper fallback for older layouts. */
+.starrynight-rightbar,
+.starrynight-rightbar .Root__right-sidebar-peek,
+.starrynight-rightbar .Root__right-sidebar-overlayWrapper > div:not(.Root__right-sidebar-peekContent),
+.starrynight-rightbar .Root__right-sidebar-fauxMainViewEnd > div,
 div:has(> div > div > aside#Desktop_PanelContainer_Id) > :first-child > * {
-  background-color: transparent !important;
-}
-
-.Root__top-container > :has(aside[aria-label="Now playing view"])::before,
-.Root__top-container > :has(.LayoutResizer__resize-bar)::before {
-  background-color: transparent !important;
-}
-
-.main-view-container
-  [style*="background-color"]:not([style*="--"]):not(.e-10860-legacy-box):not(
-    .e-10860-legacy-box *
-  ) {
   background-color: transparent !important;
   background-image: none !important;
 }
 
-.main-view-container [style*="top: 64px"],
+.starrynight-rightbar aside,
+.starrynight-rightbar aside::before,
+.starrynight-rightbar aside::after {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* A collapsed sidebar still has a narrow peek strip. Hide its contents
+   unless hovered, rather than reintroducing an opaque black cover. */
+.starrynight-rightbar .Root__right-sidebar-peek:not(.Root__right-sidebar-expanded):not(:hover)
+  .Root__right-sidebar-peekContent {
+  opacity: 0;
+}
+
+:is(.starrynight-top-container, .Root__top-container) > :has(aside[aria-label*="Now playing view"], aside[aria-label*="ahora suena"])::before,
+:is(.starrynight-top-container, .Root__top-container) > :has(.LayoutResizer__resize-bar)::before {
+  background-color: transparent !important;
+}
+
+/* Right sidebar panel behavior: smooth resizing, transparent when collapsed */
+:is(.starrynight-top-container, .Root__top-container) > :has(aside[aria-label*="Now playing view"], aside[aria-label*="ahora suena"], aside#Desktop_PanelContainer_Id) {
+  min-width: 0 !important;
+}
+
+aside[aria-label*="Now playing view"],
+aside[aria-label*="ahora suena"],
+aside#Desktop_PanelContainer_Id {
+  min-width: 220px;
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Collapsed sidebar transparency is confined to the right sidebar,
+   not every <aside> (including Spotify's player and other sidebar slots). */
+.starrynight-rightbar aside:has(button[aria-label*="Expand"], button[aria-label*="Expandir"], button[aria-label*="Mostrar"]),
+.starrynight-rightbar aside:has(button[aria-label*="Expand"], button[aria-label*="Expandir"], button[aria-label*="Mostrar"]) > div,
+body.starrynight-sidebar-collapsed .starrynight-rightbar aside,
+body.starrynight-sidebar-collapsed .starrynight-rightbar aside > div {
+  background: transparent !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* Collapsed sidebar expand control. */
+aside button[aria-label*="Expand"],
+aside button[aria-label*="Expandir"],
+aside button[aria-label*="Mostrar"] {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
+  width: 36px !important;
+  height: 36px !important;
+  margin: 16px auto !important;
+  backdrop-filter: blur(8px);
+  transition: transform 0.2s ease, background-color 0.2s ease !important;
+}
+
+aside button[aria-label*="Expand"]:hover,
+aside button[aria-label*="Expandir"]:hover,
+aside button[aria-label*="Mostrar"]:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  transform: scale(1.1) !important;
+}
+
+/* Keep sidebar and player controls fully opaque. */
+aside button,
+aside [role="button"],
+:is(.starrynight-top-container, .Root__top-container) aside button,
+:is(.starrynight-top-container, .Root__top-container) [data-testid="now-playing-bar"] button:not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]),
+.main-nowPlayingBar-extraControls button,
+.player-controls__buttons button:not([data-testid="control-button-playpause"]),
+button[aria-label*="Estás escuchando"],
+button[aria-label*="Now Playing"],
+button[aria-label*="Now playing"],
+button[aria-label*="ahora suena"],
+button[aria-label*="Ocultar"] {
+  opacity: 1 !important;
+  color: #ffffff !important;
+  visibility: visible !important;
+}
+
+aside button svg,
+aside [role="button"] svg,
+:is(.starrynight-top-container, .Root__top-container) aside button svg,
+:is(.starrynight-top-container, .Root__top-container) [data-testid="now-playing-bar"] button:not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]) svg,
+.main-nowPlayingBar-extraControls button svg,
+.player-controls__buttons button:not([data-testid="control-button-playpause"]) svg,
+button[aria-label*="Estás escuchando"] svg,
+button[aria-label*="Now Playing"] svg,
+button[aria-label*="Now playing"] svg,
+button[aria-label*="ahora suena"] svg,
+button[aria-label*="Expand"] svg,
+button[aria-label*="Expandir"] svg,
+button[aria-label*="Ocultar"] svg {
+  fill: #ffffff !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+aside button:hover,
+aside [role="button"]:hover,
+.main-nowPlayingBar-extraControls button:hover {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 50% !important;
+}
+
+/* Scope inline-background overrides to the right panel, excluding lyrics. */
+.starrynight-rightbar aside section:not([data-testid*="lyric"]):not(:has([data-testid*="lyric"])),
+.starrynight-rightbar aside article:not([data-testid*="lyric"]):not(:has([data-testid*="lyric"])),
+.starrynight-rightbar aside [data-testid="card-click-handler"],
+.starrynight-rightbar aside [data-testid="now-playing-view-artist-card"],
+.starrynight-rightbar aside [data-testid="now-playing-view-track-info"],
+.starrynight-rightbar aside div:has(> img):not([data-testid*="lyric"]):not(:has([data-testid*="lyric"])),
+[aria-label*="Now playing view"] div[style*="background"]:not([data-testid*="lyric"]):not(:has([data-testid*="lyric"])),
+[aria-label*="ahora suena"] div[style*="background"]:not([data-testid*="lyric"]):not(:has([data-testid*="lyric"])),
+[aria-label*="Now playing view"] [style*="background-color"]:not([data-testid*="lyric"]):not(:has([data-testid*="lyric"])),
+[aria-label*="ahora suena"] [style*="background-color"]:not([data-testid*="lyric"]):not(:has([data-testid*="lyric"])) {
+  background-color: transparent !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.starrynight-rightbar aside .main-nowPlayingView-trackInfo *,
+.starrynight-rightbar aside [data-testid="now-playing-view-track-info"] * {
+  color: #ffffff !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9) !important;
+}
+
+
+/* Hide the upper player when the right sidebar collapses. */
+body.starrynight-sidebar-collapsed .starrynight-playbar,
+body.starrynight-sidebar-collapsed :is(.starrynight-top-container, .Root__top-container) > :has([data-testid="now-playing-bar"]),
+body.starrynight-sidebar-collapsed .main-nowPlayingBar-container,
+body.starrynight-sidebar-collapsed [data-testid="now-playing-bar"] {
+  display: none !important;
+}
+
+body.starrynight-sidebar-collapsed :is(.starrynight-top-container, .Root__top-container) {
+  grid-template-columns: auto 1fr auto !important;
+}
+
+
+/* Keep primary-button labels legible against light or bright theme colors. */
+.main-button-primary {
+  color: #000000 !important;
+}
+
+/* Main-view transparency without descendant-wide selectors. */
+:root,
+.encore-dark-theme,
+.encore-layout-themes {
+  --background-base: transparent !important;
+  --background-elevated-base: transparent !important;
+  --background-elevated-highlight: rgba(255, 255, 255, 0.08) !important;
+  --background-elevated-press: rgba(255, 255, 255, 0.05) !important;
+  --background-highlight: rgba(255, 255, 255, 0.08) !important;
+  --background-press: rgba(255, 255, 255, 0.05) !important;
+  --background-tinted-base: transparent !important;
+  --background-tinted-highlight: rgba(255, 255, 255, 0.08) !important;
+  --background-tinted-press: rgba(255, 255, 255, 0.05) !important;
+  --background-base-high-contrast: transparent !important;
+  --background-base-70: transparent !important;
+  --background-base-20: transparent !important;
+  --spice-card: transparent !important;
+  --spice-main-elevated: transparent !important;
+  --bgColor: transparent !important;
+}
+
+.main-view-container,
+.main-view-container__scroll-node,
+.main-view-container__scroll-node-child,
+[data-testid="home-page"],
+[data-testid="playlist-page"],
+[data-testid="artist-page"],
+[data-testid="album-page"] {
+  background: transparent !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  --background-base: transparent !important;
+  --background-elevated-base: transparent !important;
+  --background-highlight: transparent !important;
+  --spice-card: transparent !important;
+  --bgColor: transparent !important;
+}
+
+:is(.starrynight-top-container, .Root__top-container) [style*="--background-base"]:not(.e-10860-legacy-box):not(.e-10860-legacy-box *):not(:is([data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper), .r8bczAWCEgb9_L0iyIcc, .IfBZ5VdI_2nwDMl4H6Yh)),
+:is(.starrynight-top-container, .Root__top-container) [style*="--background-base"]:not(.e-10860-legacy-box):not(.e-10860-legacy-box *)::after {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Home shortcut items & Spotify card transparency */
+.view-homeShortcutsGrid-shortcut,
+.view-homeShortcutsGrid-grid,
+.view-homeShortcutsGrid-shortcuts,
+[data-testid="shortcut-background"] {
+  background-color: transparent !important;
+  background: transparent !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+.view-homeShortcutsGrid-shortcut:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  transition: background-color 0.2s ease !important;
+}
+
+
 .main-view-container [role="presentation"]:has([role="columnheader"]) {
   background: transparent !important;
   border-bottom-color: transparent !important;
   box-shadow: none !important;
 }
 
-.main-topBar-background {
-  background-color: var(--spice-highlight) !important;
+/* Keep virtualized track rows transparent except on hover. */
+[role="row"] {
+  background-color: transparent !important;
 }
 
-.main-yourLibraryX-libraryContainer {
-  background: none !important;
+[role="row"]:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-.main-trackList-trackListRow:hover {
-  background-color: var(--spice-highlight);
-}
 
-.main-playPauseButton-button {
-  background-color: var(--spice-button);
-}
-
-.rX_OmqCngvY5ZCoYBZgb {
-  background-color: #00000000 !important;
-}
-
-.main-yourLibraryX-entryPoints {
-  background-color: #00000000 !important;
-}
-
-.marketplace-header {
-  background-color: #00000000 !important;
-}
-
-.EmeHQXR87mUskYK6xEde {
-  background-color: #00000000 !important;
-}
-
-.lyrics-lyrics-background {
-  background-color: #00000000 !important;
-}
-
-.main-actionBarBackground-background {
-  background-image: none;
-  background-color: #00000000 !important;
-  animation: none !important;
-  -webkit-animation: none !important;
-}
-
-.main-entityHeader-overlay {
-  background: none !important;
-}
-
-.main-entityHeader-background.main-entityHeader-gradient {
-  opacity: 0.5;
-  animation: none !important;
-}
-
-.main-entityHeader-background.main-entityHeader-overlay:after {
-  background-image: none !important;
-}
-
-.pUNc2aOeOQANHrhYa1GU .RDZ61ETnag1ilfZTkVxe {
-  color: #00000000 !important;
-}
-
-.playlist-playlist-playlistContent {
-  background: #00000000 !important;
-}
-
-.UrfDp0_mKGL9hkfh9g_R,
-.UrfDp0_mKGL9hkfh9g_R:before,
-.mzBZbIt7NDzzTffimVhn,
-.WBFaUw_oOfN2m4aTxggt,
-.main-nowPlayingView-contextItemInfo:before,
-.playlist-playlist-actionBarBackground-background,
-.main-entityHeader-backgroundColor {
-  background: none !important;
-}
-
-.sl_aPp6GDg05ItSfmsS7 {
-  display: none;
-}
-
-.main-tag-container {
-  color: var(--spice-sidebar);
-}
-
-/* ---------- now playing panel ---------- */
-
-/* width 0 + min-width 100%: the right sidebar alone sizes the column, the panel fills it.
-   theme.js sets an inline width when the right sidebar is closed. */
-.starrynight-playbar {
-  margin: 0 !important;
-  padding: 0 !important;
-  width: 0;
-  min-width: max(100%, 280px);
+/* Vertical player sizing with a 450px baseline and 280–420px panel constraints. */
+.main-nowPlayingBar-container {
+  flex-direction: column;
+  min-width: 280px;
+  max-width: 420px;
+  background: transparent !important;
+  overflow: visible !important;
 }
 
 [data-testid="now-playing-bar"] {
+  --starrynight-cover-size: min(215px, calc(var(--starrynight-panel-width, 360px) * 0.56));
+  min-height: max(450px, var(--starrynight-panel-width, 420px));
   height: auto !important;
-  min-height: 0 !important;
-  min-width: 0 !important;
-  width: 100% !important;
+  padding-bottom: 14px;
+  background: transparent !important;
+  overflow: visible !important;
 }
 
-/* stack left / center / right sections vertically */
+/* Target player sections structurally when Spotify hashes their class names. */
 [data-testid="now-playing-bar"] > div {
   flex-direction: column !important;
   height: auto !important;
@@ -263,74 +380,15 @@ div:has(> div > div > aside#Desktop_PanelContainer_Id) > :first-child > * {
   justify-content: center !important;
 }
 
-/* cover art on top, title + heart centered below */
-[data-testid="now-playing-widget-v2"] {
-  flex-direction: row !important;
-  flex-wrap: wrap !important;
-  justify-content: center !important;
+/* Legacy player section fallbacks. */
+.main-nowPlayingBar-center,
+.main-nowPlayingBar-left,
+.main-nowPlayingBar-right {
   width: 100%;
 }
 
-[data-testid="now-playing-widget-v2"] [data-testid="cover-art-container"] {
-  flex: 0 0 100% !important;
-  display: flex;
-  justify-content: center;
-  padding: 5px 0;
-  margin: 0 !important;
-}
-
-[data-testid="now-playing-widget-v2"] [data-testid="cover-art-container"] > div,
-[data-testid="now-playing-widget-v2"] [data-testid="cover-art-container"] [data-testid="cover-drop-target"] {
-  height: 220px !important;
-  width: 220px !important;
-  background-color: #00000000 !important;
-}
-
-[data-testid="now-playing-widget-v2"] [data-testid="cover-art-container"] img {
-  height: 220px !important;
-  width: 220px !important;
-  border-radius: 50% !important;
-  object-fit: cover;
-  animation: spin 25s linear infinite;
-  animation-play-state: paused;
-  box-shadow: 0 0 5px 5px var(--spice-text);
-}
-
-[data-testid="now-playing-bar"]:has([data-testid="control-button-playpause"][aria-label="Pause"])
-  [data-testid="cover-art-container"] img {
-  animation-play-state: running !important;
-}
-
-/* clip every layer in the cover slot to the circle (hover overlays, placeholders) */
-[data-testid="now-playing-widget-v2"] [data-testid="cover-art-container"] * {
-  border-radius: 50% !important;
-}
-
-[data-testid="now-playing-widget-v2"] [data-testid="cover-art-container"] > div {
-  overflow: hidden;
-  border-radius: 50% !important;
-  box-shadow: 0 0 5px 5px var(--spice-text);
-}
-
-[data-testid="now-playing-widget-v2"] [data-testid="cover-art-container"] img {
-  box-shadow: none !important;
-}
-
-/* progress bar above the buttons */
-[data-testid="player-controls"] {
-  display: flex !important;
-  flex-direction: column-reverse !important;
-  width: 100% !important;
-}
-
-[data-testid="player-controls"] > div {
-  width: 100% !important;
-}
-
-/* extra controls (lyrics, queue, volume...) */
-[data-testid="now-playing-bar"] > div > div:last-child > div {
-  justify-content: space-evenly !important;
-  width: 100%;
+.main-nowPlayingBar-extraControls {
+  justify-content: space-evenly;
 }
 
 .starrynight-bg-container {
@@ -347,113 +405,103 @@ div:has(> div > div > aside#Desktop_PanelContainer_Id) > :first-child > * {
   transform: translateZ(0);
 }
 
-button[data-testid="cover-art-button"] {
-  width: min(
-    220px,
-    calc(var(--starrynight-panel-width, 420px) * 0.524)
-  ) !important;
-  height: auto !important;
-  margin: auto;
-  aspect-ratio: 1 / 1;
-  background-color: #00000000;
-  box-shadow: 0 0 0px var(--spice-rgb-shadow);
-}
-
-[data-testid="now-playing-bar"] {
-  min-height: var(--starrynight-panel-width, max-content);
-}
-
-[data-testid="now-playing-bar"] [data-testid="now-playing-widget"] {
-  padding-top: 14px;
-}
-
-[data-testid="now-playing-bar"]
-  [data-testid="now-playing-widget"]
-  > div:has(a)
-  * {
-  text-align: center;
-  justify-content: center;
-}
-
-[data-testid="now-playing-bar"] [data-testid="CoverSlotCollapsed__container"] {
-  width: 100%;
-  margin-inline-end: 0;
-  border-radius: 0;
-  overflow: visible;
-}
-
-[data-testid="now-playing-bar"] [data-testid="cover-art-button"] > div,
-[data-testid="now-playing-bar"] [data-testid="cover-art-button"] > div > div {
-  width: 100% !important;
-  height: 100% !important;
-  background-color: transparent;
-  box-shadow: none;
-}
-
-[data-testid="now-playing-bar"] [data-testid="cover-art-button"] img {
-  width: 100%;
-  height: 100%;
+.starrynight-bg-container div,
+.starrynight-star {
+  position: absolute;
+  z-index: -1;
   border-radius: 50%;
-  object-fit: cover;
-  animation: spin 25s linear infinite;
-  animation-play-state: paused;
+  pointer-events: none;
+  background-color: var(--spice-star, #ffffff);
+  will-change: transform, opacity;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
-[data-testid="now-playing-bar"]:has(
-    [data-testid="control-button-playpause"][aria-label="Pause"]
-  )
-  [data-testid="cover-art-button"]
-  img {
-  animation-play-state: running !important;
+/* Draw stars above artwork gradients without intercepting pointer events. */
+:is(.starrynight-top-container, .Root__top-container) > .starrynight-bg-container {
+  z-index: 30 !important;
+  pointer-events: none !important;
 }
 
-[data-testid="now-playing-bar"] [data-testid="general-controls"] {
-  order: 2;
+.starrynight-bg-container > .starrynight-star,
+.starrynight-bg-container > .shootingstar {
+  z-index: 0 !important;
+  pointer-events: none !important;
+}
+
+/* Support current and legacy now-playing widget identifiers. */
+[data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"]) {
+  width: 100%;
+  padding-top: 32px !important;
+  padding-bottom: 8px !important;
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
   justify-content: center;
-}
-
-[data-testid="now-playing-bar"] .playback-bar {
-  order: 1;
-}
-
-[data-testid="now-playing-bar"] .player-controls__left,
-[data-testid="now-playing-bar"] .player-controls__right {
-  flex: 0 1 auto;
-  justify-content: center;
-}
-
-[data-testid="now-playing-bar"]
-  .main-nowPlayingWidget-nowPlaying
-  > :not([data-testid="CoverSlotCollapsed__container"]) {
-  margin-block: 12px 0;
-}
-
-[data-testid="artist-page"] > div > div {
-  background-color: transparent !important;
-  background-image: none !important;
-}
-
-[data-testid="playlist-page"] > div {
-  background-color: transparent !important;
-  background-image: none !important;
-}
-
-.LayoutResizer__resize-bar,
-.LayoutResizer__resize-bar * {
-  outline: none !important;
-}
-
-[data-testid="now-playing-bar"] [data-testid="cover-art-button"] > div,
-[data-testid="now-playing-bar"] [data-testid="cover-art-button"] > div > div {
-  width: 100% !important;
-  height: 100% !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
-  border-radius: 50% !important;
+  column-gap: 10px;
   overflow: visible !important;
 }
 
-[data-testid="now-playing-bar"] [data-testid="cover-art-button"] img {
+/* Artwork occupies the full first row, with centered information below. */
+[data-testid="now-playing-bar"] :is([data-testid="cover-art-container"], [data-testid="CoverSlotCollapsed__container"]) {
+  flex: 0 0 100% !important;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-inline-end: 0;
+  padding: 5px 0;
+  background: transparent !important;
+  overflow: visible !important;
+}
+
+/* Legacy cover-art button fallback. */
+[data-testid="now-playing-bar"] button[data-testid="cover-art-button"] {
+  width: var(--starrynight-cover-size) !important;
+  height: var(--starrynight-cover-size) !important;
+  margin: 10px auto 6px !important;
+  aspect-ratio: 1 / 1;
+  box-sizing: border-box !important;
+  padding: 0 !important;
+  display: block !important;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+[data-testid="now-playing-bar"] [data-testid="cover-art-button"] > div,
+[data-testid="now-playing-bar"] [data-testid="cover-art-button"] > div > div {
+  width: 100% !important;
+  height: 100% !important;
+  background: transparent !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+}
+
+/* Clip artwork inside the new cover slot while keeping the outer glow visible.
+   Exclude legacy-button slots to avoid duplicate glow rings. */
+[data-testid="now-playing-bar"] [data-testid="cover-art-container"]:not(:has([data-testid="cover-art-button"])) > div,
+[data-testid="now-playing-bar"] [data-testid="cover-art-container"]:not(:has([data-testid="cover-art-button"])) [data-testid="cover-drop-target"] {
+  width: var(--starrynight-cover-size) !important;
+  height: var(--starrynight-cover-size) !important;
+  background: transparent !important;
+  border-radius: 50% !important;
+}
+
+[data-testid="now-playing-bar"] [data-testid="cover-art-container"]:not(:has([data-testid="cover-art-button"])) > div {
+  box-shadow: 0 0 10px 3px var(--spice-star-glow, #ffffff),
+              0 0 4px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+[data-testid="now-playing-bar"] [data-testid="cover-art-container"]:not(:has([data-testid="cover-art-button"])) [data-testid="cover-drop-target"] {
+  overflow: hidden !important;
+}
+
+/* One 25-second rotation model for both old and new artwork components. */
+[data-testid="now-playing-bar"] [data-testid="cover-art-button"] img,
+[data-testid="now-playing-bar"] [data-testid="cover-art-container"]:not(:has([data-testid="cover-art-button"])) img {
   width: 100% !important;
   height: 100% !important;
   border-radius: 50% !important;
@@ -463,36 +511,57 @@ button[data-testid="cover-art-button"] {
   will-change: transform;
   transform: translateZ(0);
   backface-visibility: hidden;
-  box-shadow: 0 0 10px 3px var(--spice-star-glow, #ffffff), 0 0 4px 1px rgba(255, 255, 255, 0.4) !important;
 }
 
-[data-testid="now-playing-bar"]:has(
-    [data-testid="control-button-playpause"][aria-label*="aus"]
-  )
-  [data-testid="cover-art-button"]
-  img,
-[data-testid="now-playing-bar"]:has(
-    [data-testid="control-button-playpause"][aria-label*="Pause"]
-  )
-  [data-testid="cover-art-button"]
-  img,
-[data-testid="now-playing-bar"]:has(
-    [data-testid="control-button-playpause"][aria-label*="Stop"]
-  )
-  [data-testid="cover-art-button"]
-  img,
-body.starrynight-is-playing [data-testid="now-playing-bar"] [data-testid="cover-art-button"] img {
+/* Preserve the existing image glow on the legacy cover button. */
+[data-testid="now-playing-bar"] [data-testid="cover-art-button"] img {
+  box-shadow: 0 0 10px 3px var(--spice-star-glow, #ffffff),
+              0 0 4px 1px rgba(255, 255, 255, 0.4) !important;
+}
+
+/* The new wrapper supplies its glow, keeping the spinning image circular. */
+[data-testid="now-playing-bar"] [data-testid="cover-art-container"]:not(:has([data-testid="cover-art-button"])) img {
+  box-shadow: none !important;
+}
+
+/* Spicetify Player drives the preferred state. The native button label remains
+   a fallback if the script hasn't connected yet (including localized labels). */
+[data-testid="now-playing-bar"]:has([data-testid="control-button-playpause"][aria-label*="aus"])
+  :is([data-testid="cover-art-button"], [data-testid="cover-art-container"]) img,
+[data-testid="now-playing-bar"]:has([data-testid="control-button-playpause"][aria-label*="Pause"])
+  :is([data-testid="cover-art-button"], [data-testid="cover-art-container"]) img,
+[data-testid="now-playing-bar"]:has([data-testid="control-button-playpause"][aria-label*="Stop"])
+  :is([data-testid="cover-art-button"], [data-testid="cover-art-container"]) img,
+body.starrynight-is-playing [data-testid="now-playing-bar"]
+  :is([data-testid="cover-art-button"], [data-testid="cover-art-container"]) img {
   animation-play-state: running !important;
 }
 
-[data-testid="now-playing-bar"] [data-testid="general-controls"],
-[data-testid="now-playing-bar"] .player-controls__buttons {
+/* Modern player-controls wrapper replaces the older layout/order assumptions. */
+[data-testid="now-playing-bar"] [data-testid="player-controls"] {
+  display: flex !important;
+  flex-direction: column-reverse !important;
+  width: 100% !important;
+}
+
+[data-testid="now-playing-bar"] [data-testid="player-controls"] > div {
+  width: 100% !important;
+}
+
+/* Only use legacy order hints when there is no modern player-controls parent. */
+[data-testid="now-playing-bar"] :not([data-testid="player-controls"]) > :is([data-testid="general-controls"], .player-controls__buttons) {
   order: 2;
+}
+
+[data-testid="now-playing-bar"] :not([data-testid="player-controls"]) > .playback-bar {
+  order: 1;
+}
+
+[data-testid="now-playing-bar"] :is([data-testid="general-controls"], .player-controls__buttons) {
   justify-content: center;
 }
 
 [data-testid="now-playing-bar"] .playback-bar {
-  order: 1;
   transform: translateY(-12px) !important;
 }
 
@@ -500,6 +569,12 @@ body.starrynight-is-playing [data-testid="now-playing-bar"] [data-testid="cover-
 [data-testid="now-playing-bar"] .player-controls__right {
   flex: 0 1 auto;
   justify-content: center;
+}
+
+/* Modern hashed extra-controls section, with original spacing preserved. */
+[data-testid="now-playing-bar"] > div > div:last-child > div {
+  justify-content: space-evenly !important;
+  width: 100%;
 }
 
 [data-testid="now-playing-bar"] [data-testid="control-button-playpause"] {
@@ -511,12 +586,6 @@ body.starrynight-is-playing [data-testid="now-playing-bar"] [data-testid="cover-
 [data-testid="now-playing-bar"] [data-testid="control-button-playpause"] svg {
   fill: #000000 !important;
   color: #000000 !important;
-}
-
-[data-testid="now-playing-bar"]
-  .main-nowPlayingWidget-nowPlaying
-  > :not([data-testid="CoverSlotCollapsed__container"]) {
-  margin-block: 10px 0;
 }
 
 .LayoutResizer__resize-bar,
@@ -613,7 +682,7 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
 }
 
 .shootingstar::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -641,6 +710,7 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
 @media (prefers-reduced-motion: reduce) {
   .shootingstar,
   [data-testid="now-playing-bar"] [data-testid="cover-art-button"] img,
+  [data-testid="now-playing-bar"] [data-testid="cover-art-container"] img,
   .starrynight-bg-container div {
     animation: none !important;
   }
@@ -807,8 +877,8 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   /* Downpurp control and icon colors. */
   aside button,
   aside [role="button"],
-  .Root__top-container aside button,
-  .Root__top-container [data-testid="now-playing-bar"] button:not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]),
+  :is(.starrynight-top-container, .Root__top-container) aside button,
+  :is(.starrynight-top-container, .Root__top-container) [data-testid="now-playing-bar"] button:not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]),
   .main-nowPlayingBar-extraControls button,
   .player-controls__buttons button:not([data-testid="control-button-playpause"]),
   button[aria-label*="Estás escuchando"],
@@ -821,8 +891,8 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
 
   aside button svg,
   aside [role="button"] svg,
-  .Root__top-container aside button svg,
-  .Root__top-container [data-testid="now-playing-bar"] button:not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]) svg,
+  :is(.starrynight-top-container, .Root__top-container) aside button svg,
+  :is(.starrynight-top-container, .Root__top-container) [data-testid="now-playing-bar"] button:not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]) svg,
   .main-nowPlayingBar-extraControls button svg,
   .player-controls__buttons button:not([data-testid="control-button-playpause"]) svg,
   button[aria-label*="Estás escuchando"] svg,
@@ -854,7 +924,8 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   }
 
   
-  [data-testid="now-playing-bar"] [data-testid="cover-art-button"] img {
+  [data-testid="now-playing-bar"] [data-testid="cover-art-button"] img,
+  [data-testid="now-playing-bar"] [data-testid="cover-art-container"]:not(:has([data-testid="cover-art-button"])) > div {
     box-shadow: 0 0 10px 3px var(--spice-star-glow, #ffffff),
                 0 0 4px 1px rgba(var(--spice-rgb-star-glow, 255, 255, 255), 0.4) !important;
   }
@@ -870,25 +941,33 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   }
 }
 
-/* Keep the cover above the centered track info, with the Like button beside it. */
-[data-testid="now-playing-bar"] [data-testid="now-playing-widget"] {
+/* Track information stays centered under the circular cover. */
+[data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"]) > :has(a),
+[data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"]) > :has(a) a {
+  text-align: center;
+  justify-content: center;
+  min-width: 0;
+}
+
+/* Use three columns when a direct Like toggle is present; otherwise keep
+   the widget's flexible layout. */
+[data-testid="now-playing-bar"] [data-testid="now-playing-widget-v2"]:has(> [data-testid="cover-art-container"]):has(> * > button[aria-checked]),
+[data-testid="now-playing-bar"] [data-testid="now-playing-widget"]:has(> [data-testid="CoverSlotCollapsed__container"]):has(> * > button[aria-checked]) {
   display: grid !important;
   grid-template-columns: minmax(0, 1fr) minmax(0, max-content) minmax(0, 1fr);
   column-gap: 10px;
   align-items: center;
 }
 
-[data-testid="now-playing-bar"]
-  [data-testid="now-playing-widget"]
-  > [data-testid="CoverSlotCollapsed__container"] {
+[data-testid="now-playing-bar"] [data-testid="now-playing-widget-v2"] > [data-testid="cover-art-container"],
+[data-testid="now-playing-bar"] [data-testid="now-playing-widget"] > [data-testid="CoverSlotCollapsed__container"] {
   grid-column: 1 / -1;
   grid-row: 1;
   justify-self: center;
 }
 
-[data-testid="now-playing-bar"]
-  [data-testid="now-playing-widget"]
-  > :not([data-testid="CoverSlotCollapsed__container"]):not(:has(> button[aria-checked])) {
+[data-testid="now-playing-bar"] [data-testid="now-playing-widget-v2"] > :not([data-testid="cover-art-container"]):not(:has(> button[aria-checked])),
+[data-testid="now-playing-bar"] [data-testid="now-playing-widget"] > :not([data-testid="CoverSlotCollapsed__container"]):not(:has(> button[aria-checked])) {
   grid-column: 2;
   grid-row: 2;
   justify-self: center;
@@ -896,9 +975,7 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   margin-inline: 0 !important;
 }
 
-[data-testid="now-playing-bar"]
-  [data-testid="now-playing-widget"]
-  > :has(> button[aria-checked]) {
+[data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"]) > :has(> button[aria-checked]) {
   grid-column: 3;
   grid-row: 2;
   justify-self: start;
@@ -906,11 +983,8 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   margin-inline: 0 !important;
 }
 
-/* Keep the Like button square so its hover highlight stays round. */
-[data-testid="now-playing-bar"]
-  [data-testid="now-playing-widget"]
-  > :has(> button[aria-checked])
-  > button[aria-checked] {
+/* Preserve the 32px circular Like button without targeting unrelated controls. */
+[data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"]) button[aria-checked] {
   box-sizing: border-box !important;
   width: 32px !important;
   min-width: 32px !important;
@@ -925,22 +999,14 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   border-radius: 50% !important;
 }
 
-[data-testid="now-playing-bar"]
-  [data-testid="now-playing-widget"]
-  > :has(> button[aria-checked])
-  > button[aria-checked]::before,
-[data-testid="now-playing-bar"]
-  [data-testid="now-playing-widget"]
-  > :has(> button[aria-checked])
-  > button[aria-checked]::after {
+[data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"]) button[aria-checked]::before,
+[data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"]) button[aria-checked]::after {
   border-radius: 50% !important;
 }
 
-/* Soften the Like button hover glow without changing its 32px hit area. */
-[data-testid="now-playing-bar"]
-  [data-testid="now-playing-widget"]
-  > :has(> button[aria-checked])
-  > button[aria-checked]:is(:hover, :focus-visible) {
+/* StarryNight's softer Like-button hover glow, with its full 32px hit area. */
+[data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"])
+  button[aria-checked]:is(:hover, :focus-visible) {
   background: radial-gradient(
     circle at center,
     rgba(var(--spice-rgb-star-glow, 255, 255, 255), 0.26) 0%,
@@ -952,12 +1018,12 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
 
 /* Use a circular hover fill for icon buttons with non-square hitboxes.
    The Like button keeps its own softer glow. */
-.Root__top-container [data-testid="now-playing-bar"]
+:is(.starrynight-top-container, .Root__top-container) [data-testid="now-playing-bar"]
   button:not([aria-checked]):not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]):hover,
-.Root__top-container .player-controls__buttons
+:is(.starrynight-top-container, .Root__top-container) .player-controls__buttons
   button:not([data-testid="control-button-playpause"]):hover,
-.Root__top-container .main-nowPlayingBar-extraControls button:hover,
-.Root__top-container aside button[aria-label]:has(svg):not([data-testid="cover-art-button"]):not([aria-checked]):not([aria-label*="Expand"]):not([aria-label*="Expandir"]):not([aria-label*="Mostrar"]):hover {
+:is(.starrynight-top-container, .Root__top-container) .main-nowPlayingBar-extraControls button:hover,
+:is(.starrynight-top-container, .Root__top-container) aside button[aria-label]:has(svg):not([data-testid="cover-art-button"]):not([aria-checked]):not([aria-label*="Expand"]):not([aria-label*="Expandir"]):not([aria-label*="Mostrar"]):hover {
   background: radial-gradient(
     circle closest-side at center,
     rgba(255, 255, 255, 0.20) 0% 99%,
@@ -967,12 +1033,12 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
 
 /* Use Downpurp purple for these hover highlights. */
 @container style(--spice-downpurp-marker: #010101) {
-  .Root__top-container [data-testid="now-playing-bar"]
+  :is(.starrynight-top-container, .Root__top-container) [data-testid="now-playing-bar"]
     button:not([aria-checked]):not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]):hover,
-  .Root__top-container .player-controls__buttons
+  :is(.starrynight-top-container, .Root__top-container) .player-controls__buttons
     button:not([data-testid="control-button-playpause"]):hover,
-  .Root__top-container .main-nowPlayingBar-extraControls button:hover,
-  .Root__top-container aside button[aria-label]:has(svg):not([data-testid="cover-art-button"]):not([aria-checked]):not([aria-label*="Expand"]):not([aria-label*="Expandir"]):not([aria-label*="Mostrar"]):hover {
+  :is(.starrynight-top-container, .Root__top-container) .main-nowPlayingBar-extraControls button:hover,
+  :is(.starrynight-top-container, .Root__top-container) aside button[aria-label]:has(svg):not([data-testid="cover-art-button"]):not([aria-checked]):not([aria-label*="Expand"]):not([aria-label*="Expandir"]):not([aria-label*="Mostrar"]):hover {
     background: radial-gradient(
       circle closest-side at center,
       rgba(var(--spice-rgb-highlight, 133, 84, 240), 0.20) 0% 99%,
