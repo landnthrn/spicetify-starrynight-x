@@ -1,7 +1,7 @@
 /* Shared theme settings. Color palettes are defined in color.ini. */
 :root {
-  /* Native artwork gradients: 0 = hidden, 1 = visible. */
-  --theme-color-banners-enabled: 1;
+  /* Artwork gradients */
+  --theme-color-banners-enabled: 0;
 
   /* Context menus and search suggestions share these settings. */
   --theme-context-menu-color: var(--spice-context-menu-color);
