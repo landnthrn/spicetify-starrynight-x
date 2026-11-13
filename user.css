@@ -21,10 +21,16 @@
 
   /* Highlights */
   --theme-highlight-hover-opacity: 9%;
+  --theme-highlight-current-opacity: 7%;
+  --theme-highlight-playing-opacity: 10%;
+  --theme-highlight-selected-opacity: 11.5%;
   /* Extra hover tint on Home tiles */
   --theme-highlight-home-extra-opacity: 6%;
 
   --theme-row-hover: color-mix(in srgb, var(--spice-highlight) var(--theme-highlight-hover-opacity), transparent);
+  --theme-row-current: color-mix(in srgb, var(--spice-highlight) var(--theme-highlight-current-opacity), transparent);
+  --theme-row-playing: color-mix(in srgb, var(--spice-highlight) var(--theme-highlight-playing-opacity), transparent);
+  --theme-row-selected: color-mix(in srgb, var(--spice-highlight) var(--theme-highlight-selected-opacity), transparent);
   --theme-hover-extra-tint: color-mix(in srgb, var(--spice-highlight) var(--theme-highlight-home-extra-opacity), transparent);
 }
 
@@ -376,6 +382,29 @@ body.starrynight-sidebar-collapsed :is(.starrynight-top-container, .Root__top-co
 #main-view .main-trackList-trackListRow:hover {
     background-color: var(--theme-row-hover) !important;
 }
+
+/* Liked Songs lacks aria-selected on its Library entry. */
+#Desktop_LeftSidebar_Id .main-yourLibraryX-listItem[aria-selected="true"] [data-encore-id="listRow"],
+:where(body:has(#main-view main[aria-label="Spotify – Liked Songs"]))
+  #Desktop_LeftSidebar_Id .main-yourLibraryX-listItem:has(
+    button[aria-label="Play Liked Songs"],
+    button[aria-label="Pause Liked Songs"]
+  ) [data-encore-id="listRow"] {
+    background-color: var(--theme-row-current) !important;
+}
+
+#Desktop_LeftSidebar_Id .main-yourLibraryX-listItem:has(button[aria-label^="Pause "]) [data-encore-id="listRow"],
+#main-view .view-homeShortcutsGrid-shortcut:has(.view-homeShortcutsGrid-playingEqualizer),
+#main-view .main-trackList-trackListRow:has(button[aria-label="Pause"]),
+#main-view .main-trackList-trackListRow.main-trackList-active {
+    background-color: var(--theme-row-playing) !important;
+}
+
+/* Selected rows take precedence over playback and hover. */
+#main-view [role="row"][aria-selected="true"] > .main-trackList-trackListRow {
+    background-color: var(--theme-row-selected) !important;
+}
+
 
 
 /* Vertical player sizing with a 450px baseline and 280–420px panel constraints. */
