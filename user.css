@@ -1156,36 +1156,15 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   box-shadow: 0 0 9px 2px rgba(var(--spice-rgb-star-glow, 255, 255, 255), 0.12) !important;
 }
 
-/* Use a circular hover fill for icon buttons with non-square hitboxes.
-   The Like button keeps its own softer glow. */
-:is(.starrynight-top-container, .Root__top-container) [data-testid="now-playing-bar"]
-  button:not([aria-checked]):not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]):hover,
-:is(.starrynight-top-container, .Root__top-container) .player-controls__buttons
-  button:not([data-testid="control-button-playpause"]):hover,
-:is(.starrynight-top-container, .Root__top-container) .main-nowPlayingBar-extraControls button:hover,
-:is(.starrynight-top-container, .Root__top-container) aside button[aria-label]:has(svg):not([data-testid="cover-art-button"]):not([aria-checked]):not([aria-label*="Expand"]):not([aria-label*="Expandir"]):not([aria-label*="Mostrar"]):hover {
-  background: radial-gradient(
-    circle closest-side at center,
-    rgba(255, 255, 255, 0.20) 0% 99%,
-    transparent 100%
-  ) !important;
+/* Keep ordinary player controls free of circular gradients. */
+:is(.starrynight-top-container, .Root__top-container)
+:is([data-testid="now-playing-bar"], .player-controls__buttons, .main-nowPlayingBar-extraControls)
+button:not([aria-checked]):not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]):hover {
+  background-image: none !important;
+  background-color: transparent !important;
 }
 
-/* Use Downpurp purple for these hover highlights. */
-@container style(--spice-downpurp-marker: #010101) {
-  :is(.starrynight-top-container, .Root__top-container) [data-testid="now-playing-bar"]
-    button:not([aria-checked]):not([data-testid="control-button-playpause"]):not([data-testid="cover-art-button"]):hover,
-  :is(.starrynight-top-container, .Root__top-container) .player-controls__buttons
-    button:not([data-testid="control-button-playpause"]):hover,
-  :is(.starrynight-top-container, .Root__top-container) .main-nowPlayingBar-extraControls button:hover,
-  :is(.starrynight-top-container, .Root__top-container) aside button[aria-label]:has(svg):not([data-testid="cover-art-button"]):not([aria-checked]):not([aria-label*="Expand"]):not([aria-label*="Expandir"]):not([aria-label*="Mostrar"]):hover {
-    background: radial-gradient(
-      circle closest-side at center,
-      rgba(var(--spice-rgb-highlight, 133, 84, 240), 0.20) 0% 99%,
-      transparent 100%
-    ) !important;
-  }
-}
+/* Native artwork banners */
 
 /* Keep scroll surfaces clear so the artwork gradients remain visible. */
 #main-view:has([data-testid="entity-header"])
