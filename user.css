@@ -421,6 +421,19 @@ body.starrynight-sidebar-collapsed :is(.starrynight-top-container, .Root__top-co
     background-color: transparent !important;
 }
 
+.main-contextMenu-menuItemButton:hover,
+ul[role="menu"] [role="menuitem"]:hover,
+ul[role="menu"] [role="option"]:hover {
+    background-color: var(--theme-row-hover) !important;
+}
+
+/* Add to Playlist and nested menu rows */
+#spicetify-playlist-list .main-useDropTarget-base:hover,
+ul[role="menu"] .main-rootlist-wrapper .main-useDropTarget-base:hover,
+ul[role="menu"] [data-encore-id="listRow"]:hover::after {
+    background-color: var(--theme-row-hover) !important;
+}
+
 
 
 /* Vertical player sizing with a 450px baseline and 280–420px panel constraints. */
