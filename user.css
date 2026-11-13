@@ -3,10 +3,14 @@
   /* Native artwork gradients: 0 = hidden, 1 = visible. */
   --theme-color-banners-enabled: 1;
 
-  /* Set a solid menu background and blur: none to disable the glass effect.
-     Use var(--spice-context-menu-color) for a scheme-specific menu color. */
-  --theme-context-menu-background: transparent;
+  /* Context menus and search suggestions share these settings. */
+  --theme-context-menu-color: var(--spice-context-menu-color);
+  --theme-context-menu-tint-opacity: 0%;
   --theme-context-menu-blur: blur(24px);
+  --theme-context-menu-background: color-mix(
+    in srgb, var(--theme-context-menu-color) var(--theme-context-menu-tint-opacity), transparent
+  );
+
 }
 
 .os-scrollbar {
@@ -1140,8 +1144,14 @@ ul[role="menu"]::before {
   backdrop-filter: var(--theme-context-menu-blur, blur(24px));
 }
 
-/* Keep Add to Playlist's Cancel footer transparent so the shared menu
-   backdrop shows through in both blur and solid-color modes. */
+/* Search suggestions use the shared menu surface. */
+#search-dropdown[role="listbox"] > div {
+  background-color: var(--theme-context-menu-background) !important;
+  -webkit-backdrop-filter: var(--theme-context-menu-blur, blur(24px)) !important;
+  backdrop-filter: var(--theme-context-menu-blur, blur(24px)) !important;
+}
+
+/* The Add to Playlist footer sits outside the menu backdrop. */
 form:has(> ul[role="menu"]) > div:has(> button) {
   background-color: transparent !important;
   background-image: none !important;
