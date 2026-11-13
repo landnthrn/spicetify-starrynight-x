@@ -11,6 +11,14 @@
     in srgb, var(--theme-context-menu-color) var(--theme-context-menu-tint-opacity), transparent
   );
 
+  /* Sticky headers */
+  --theme-header-color: var(--spice-header-color);
+  --theme-header-tint-opacity: 0%;
+  --theme-header-blur: blur(24px);
+  --theme-header-background: color-mix(
+    in srgb, var(--theme-header-color) var(--theme-header-tint-opacity), transparent
+  );
+
 }
 
 .os-scrollbar {
@@ -761,9 +769,9 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   height: 100% !important;
   z-index: 5 !important;
   --background-base: transparent !important;
-  background: transparent !important;
-  -webkit-backdrop-filter: blur(24px) !important;
-  backdrop-filter: blur(24px) !important;
+  background: var(--theme-header-background) !important;
+  -webkit-backdrop-filter: var(--theme-header-blur) !important;
+  backdrop-filter: var(--theme-header-blur) !important;
   -webkit-mask-image: linear-gradient(to bottom, black 0, black calc(100% - 22px), transparent 100%) !important;
   mask-image: linear-gradient(to bottom, black 0, black calc(100% - 22px), transparent 100%) !important;
 }
@@ -800,9 +808,9 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   inset: 0 !important;
   z-index: -1;
   pointer-events: none !important;
-  background: transparent !important;
-  -webkit-backdrop-filter: blur(24px) !important;
-  backdrop-filter: blur(24px) !important;
+  background: var(--theme-header-background) !important;
+  -webkit-backdrop-filter: var(--theme-header-blur) !important;
+  backdrop-filter: var(--theme-header-blur) !important;
   -webkit-mask-image: linear-gradient(to bottom, transparent 0, black 22px) !important;
   mask-image: linear-gradient(to bottom, transparent 0, black 22px) !important;
 }
