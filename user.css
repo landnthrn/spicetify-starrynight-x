@@ -1,4 +1,3 @@
-/* Shared theme settings. Color palettes are defined in color.ini. */
 :root {
   /* Artwork gradients */
   --theme-color-banners-enabled: 0;
@@ -46,7 +45,7 @@
     var(--spice-sidebar) 100%
   ) !important;
   overflow: hidden;
-  /* Retain the three-row layout across modern and legacy root containers. */
+  /* Three-row layout for current and legacy roots. */
   grid-template-areas:
     "top-banner global-nav global-nav"
     "left-sidebar main-view now-playing-bar"
@@ -55,13 +54,12 @@
   grid-template-rows: auto auto 1fr !important;
 }
 
-/* Span overlay portals across the content rows without changing menu positioning. */
+/* Keep overlay portals across content rows without shifting menus. */
 .starrynight-top-container > div:has(> #floating-ui-popover-layer),
 .starrynight-top-container > div:has(> .VTO__modal-slot) {
   grid-row: 2 / -1 !important;
 }
 
-/* The fullscreen lyrics cinema spans the entire root, including navigation. */
 .starrynight-top-container > :is(.Root__lyrics-cinema, #lyrics-cinema) {
   grid-row: 1 / -1 !important;
 }
@@ -74,21 +72,19 @@
   overflow: visible !important;
 }
 
-/* Prefer Spotify's stable navigation ID; retain the legacy class fallback. */
+/* Legacy navigation fallback. */
 #global-nav-bar,
 .Root__globalNav {
   background-color: transparent !important;
 }
 
-/* Scope library-panel transparency to its stable Spotify container ID. */
 #Desktop_LeftSidebar_Id,
 #Desktop_LeftSidebar_Id nav > div {
   background-color: transparent !important;
   background-image: none !important;
 }
 
-/* The main-view shell is transparent; the native banner layers inside it
-   still obey --theme-color-banners-enabled and their existing alpha masks. */
+/* Main-view transparency does not control artwork banners. */
 #main-view {
   background-color: transparent !important;
 }
@@ -135,8 +131,7 @@
   box-sizing: border-box;
 }
 
-/* Clear the actual right-sidebar slot and Spotify's opaque layers.
-   Keep the legacy measured wrapper fallback for older layouts. */
+/* Clear right-sidebar backgrounds, including the legacy wrapper. */
 .starrynight-rightbar,
 .starrynight-rightbar .Root__right-sidebar-peek,
 .starrynight-rightbar .Root__right-sidebar-overlayWrapper > div:not(.Root__right-sidebar-peekContent),
@@ -153,8 +148,7 @@ div:has(> div > div > aside#Desktop_PanelContainer_Id) > :first-child > * {
   background-image: none !important;
 }
 
-/* A collapsed sidebar still has a narrow peek strip. Hide its contents
-   unless hovered, rather than reintroducing an opaque black cover. */
+/* Hide the collapsed sidebar peek until hover. */
 .starrynight-rightbar .Root__right-sidebar-peek:not(.Root__right-sidebar-expanded):not(:hover)
   .Root__right-sidebar-peekContent {
   opacity: 0;
@@ -165,7 +159,6 @@ div:has(> div > div > aside#Desktop_PanelContainer_Id) > :first-child > * {
   background-color: transparent !important;
 }
 
-/* Right sidebar panel behavior: smooth resizing, transparent when collapsed */
 :is(.starrynight-top-container, .Root__top-container) > :has(aside[aria-label*="Now playing view"], aside[aria-label*="ahora suena"], aside#Desktop_PanelContainer_Id) {
   min-width: 0 !important;
 }
@@ -178,8 +171,7 @@ aside#Desktop_PanelContainer_Id {
   background-color: transparent !important;
 }
 
-/* Collapsed sidebar transparency is confined to the right sidebar,
-   not every <aside> (including Spotify's player and other sidebar slots). */
+/* Restrict collapsed-state overrides to the right sidebar. */
 .starrynight-rightbar aside:has(button[aria-label*="Expand"], button[aria-label*="Expandir"], button[aria-label*="Mostrar"]),
 .starrynight-rightbar aside:has(button[aria-label*="Expand"], button[aria-label*="Expandir"], button[aria-label*="Mostrar"]) > div,
 body.starrynight-sidebar-collapsed .starrynight-rightbar aside,
@@ -190,7 +182,6 @@ body.starrynight-sidebar-collapsed .starrynight-rightbar aside > div {
   border: none !important;
 }
 
-/* Collapsed sidebar expand control. */
 aside button[aria-label*="Expand"],
 aside button[aria-label*="Expandir"],
 aside button[aria-label*="Mostrar"] {
@@ -211,7 +202,7 @@ aside button[aria-label*="Mostrar"]:hover {
   transform: scale(1.1) !important;
 }
 
-/* Keep sidebar and player controls fully opaque. */
+/* Do not fade interactive sidebar and player controls. */
 aside button,
 aside [role="button"],
 :is(.starrynight-top-container, .Root__top-container) aside button,
@@ -293,7 +284,6 @@ button[aria-label*="Ocultar"] svg {
 }
 
 
-/* Hide the upper player when the right sidebar collapses. */
 body.starrynight-sidebar-collapsed .starrynight-playbar,
 body.starrynight-sidebar-collapsed :is(.starrynight-top-container, .Root__top-container) > :has([data-testid="now-playing-bar"]),
 body.starrynight-sidebar-collapsed .main-nowPlayingBar-container,
@@ -306,12 +296,12 @@ body.starrynight-sidebar-collapsed :is(.starrynight-top-container, .Root__top-co
 }
 
 
-/* Keep primary-button labels legible against light or bright theme colors. */
+/* Maintain label contrast in bright schemes. */
 .main-button-primary {
   color: #000000 !important;
 }
 
-/* Main-view transparency without descendant-wide selectors. */
+/* Main-view surfaces */
 :root,
 .encore-dark-theme,
 .encore-layout-themes {
@@ -355,7 +345,7 @@ body.starrynight-sidebar-collapsed :is(.starrynight-top-container, .Root__top-co
   background-image: none !important;
 }
 
-/* Home shortcut items & Spotify card transparency */
+/* Home shortcut transparency */
 .view-homeShortcutsGrid-shortcut,
 .view-homeShortcutsGrid-grid,
 .view-homeShortcutsGrid-shortcuts,
@@ -377,7 +367,7 @@ body.starrynight-sidebar-collapsed :is(.starrynight-top-container, .Root__top-co
   box-shadow: none !important;
 }
 
-/* Keep virtualized track rows transparent except on hover. */
+/* Virtualized track rows need a transparent base. */
 [role="row"] {
   background-color: transparent !important;
 }
@@ -493,7 +483,8 @@ ul[role="menu"] [data-encore-id="listRow"]:hover::after {
 }
 
 
-/* Vertical player sizing with a 450px baseline and 280–420px panel constraints. */
+
+/* Vertical player layout; 280–420px panel width. */
 .main-nowPlayingBar-container {
   flex-direction: column;
   min-width: 280px;
@@ -511,7 +502,7 @@ ul[role="menu"] [data-encore-id="listRow"]:hover::after {
   overflow: visible !important;
 }
 
-/* Target player sections structurally when Spotify hashes their class names. */
+/* Use structure instead of generated player class names. */
 [data-testid="now-playing-bar"] > div {
   flex-direction: column !important;
   height: auto !important;
@@ -525,7 +516,7 @@ ul[role="menu"] [data-encore-id="listRow"]:hover::after {
   justify-content: center !important;
 }
 
-/* Legacy player section fallbacks. */
+/* Legacy player fallback */
 .main-nowPlayingBar-center,
 .main-nowPlayingBar-left,
 .main-nowPlayingBar-right {
@@ -562,7 +553,7 @@ ul[role="menu"] [data-encore-id="listRow"]:hover::after {
   backface-visibility: hidden;
 }
 
-/* Draw stars above artwork gradients without intercepting pointer events. */
+/* Draw stars above banners without intercepting clicks. */
 :is(.starrynight-top-container, .Root__top-container) > .starrynight-bg-container {
   z-index: 30 !important;
   pointer-events: none !important;
@@ -574,7 +565,7 @@ ul[role="menu"] [data-encore-id="listRow"]:hover::after {
   pointer-events: none !important;
 }
 
-/* Support current and legacy now-playing widget identifiers. */
+/* Support both versions of the Now Playing widget. */
 [data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"]) {
   width: 100%;
   padding-top: 32px !important;
@@ -587,7 +578,6 @@ ul[role="menu"] [data-encore-id="listRow"]:hover::after {
   overflow: visible !important;
 }
 
-/* Artwork occupies the full first row, with centered information below. */
 [data-testid="now-playing-bar"] :is([data-testid="cover-art-container"], [data-testid="CoverSlotCollapsed__container"]) {
   flex: 0 0 100% !important;
   width: 100%;
@@ -599,7 +589,6 @@ ul[role="menu"] [data-encore-id="listRow"]:hover::after {
   overflow: visible !important;
 }
 
-/* Legacy cover-art button fallback. */
 [data-testid="now-playing-bar"] button[data-testid="cover-art-button"] {
   width: var(--starrynight-cover-size) !important;
   height: var(--starrynight-cover-size) !important;
@@ -625,8 +614,7 @@ ul[role="menu"] [data-encore-id="listRow"]:hover::after {
   overflow: visible !important;
 }
 
-/* Clip artwork inside the new cover slot while keeping the outer glow visible.
-   Exclude legacy-button slots to avoid duplicate glow rings. */
+/* Clip artwork inside the cover slot; keep its glow outside the clip. */
 [data-testid="now-playing-bar"] [data-testid="cover-art-container"]:not(:has([data-testid="cover-art-button"])) > div,
 [data-testid="now-playing-bar"] [data-testid="cover-art-container"]:not(:has([data-testid="cover-art-button"])) [data-testid="cover-drop-target"] {
   width: var(--starrynight-cover-size) !important;
@@ -644,7 +632,6 @@ ul[role="menu"] [data-encore-id="listRow"]:hover::after {
   overflow: hidden !important;
 }
 
-/* One 25-second rotation model for both old and new artwork components. */
 [data-testid="now-playing-bar"] [data-testid="cover-art-button"] img,
 [data-testid="now-playing-bar"] [data-testid="cover-art-container"]:not(:has([data-testid="cover-art-button"])) img {
   width: 100% !important;
@@ -658,19 +645,16 @@ ul[role="menu"] [data-encore-id="listRow"]:hover::after {
   backface-visibility: hidden;
 }
 
-/* Preserve the existing image glow on the legacy cover button. */
 [data-testid="now-playing-bar"] [data-testid="cover-art-button"] img {
   box-shadow: 0 0 10px 3px var(--spice-star-glow, #ffffff),
               0 0 4px 1px rgba(255, 255, 255, 0.4) !important;
 }
 
-/* The new wrapper supplies its glow, keeping the spinning image circular. */
 [data-testid="now-playing-bar"] [data-testid="cover-art-container"]:not(:has([data-testid="cover-art-button"])) img {
   box-shadow: none !important;
 }
 
-/* Spicetify Player drives the preferred state. The native button label remains
-   a fallback if the script hasn't connected yet (including localized labels). */
+/* Playback state uses Spicetify Player with native button-label fallbacks. */
 [data-testid="now-playing-bar"]:has([data-testid="control-button-playpause"][aria-label*="aus"])
   :is([data-testid="cover-art-button"], [data-testid="cover-art-container"]) img,
 [data-testid="now-playing-bar"]:has([data-testid="control-button-playpause"][aria-label*="Pause"])
@@ -682,7 +666,6 @@ body.starrynight-is-playing [data-testid="now-playing-bar"]
   animation-play-state: running !important;
 }
 
-/* Modern player-controls wrapper replaces the older layout/order assumptions. */
 [data-testid="now-playing-bar"] [data-testid="player-controls"] {
   display: flex !important;
   flex-direction: column-reverse !important;
@@ -693,7 +676,7 @@ body.starrynight-is-playing [data-testid="now-playing-bar"]
   width: 100% !important;
 }
 
-/* Only use legacy order hints when there is no modern player-controls parent. */
+/* Apply legacy order rules only outside the modern controls wrapper. */
 [data-testid="now-playing-bar"] :not([data-testid="player-controls"]) > :is([data-testid="general-controls"], .player-controls__buttons) {
   order: 2;
 }
@@ -716,7 +699,7 @@ body.starrynight-is-playing [data-testid="now-playing-bar"]
   justify-content: center;
 }
 
-/* Modern hashed extra-controls section, with original spacing preserved. */
+/* Structural fallback for unnamed extra controls. */
 [data-testid="now-playing-bar"] > div > div:last-child > div {
   justify-content: space-evenly !important;
   width: 100%;
@@ -883,14 +866,14 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   backdrop-filter: var(--theme-header-blur) !important;
 }
 
-/* Overlap the top-bar and track-header blurs without shifting their content. */
+/* Sticky header blur layering */
 
-/* Keep the stars behind the headers. */
+/* Keep header controls above the starfield. */
 #main-view {
   z-index: 1 !important;
 }
 
-/* Extend the 64px top bar to 88px without moving its controls. */
+/* Extend the topbar to 88px without moving its controls. */
 #main-view > header[data-testid="topbar"] {
   box-sizing: border-box !important;
   height: 88px !important;
@@ -902,7 +885,7 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   backdrop-filter: none !important;
 }
 
-/* Blur the native top-bar background and feather its bottom edge. */
+/* Feather the bottom 22px of the blurred topbar. */
 #main-view > header[data-testid="topbar"] > div[style*="--background-base"] {
   height: 100% !important;
   z-index: 5 !important;
@@ -918,13 +901,12 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   background: transparent !important;
 }
 
-/* Keep the top-bar controls above both blur layers. */
 #main-view > header[data-testid="topbar"] > .contentSpacing {
   position: relative !important;
   z-index: 20 !important;
 }
 
-/* Extend the 37px track header upward by 24px without moving its text. */
+/* Extend the track header 24px upward to meet the topbar blur. */
 .main-view-container__scroll-node-child
 [data-scroll-size-invariant-class][role="presentation"]:has(> [role="presentation"] > [role="row"] > [role="columnheader"]) {
   box-sizing: border-box !important;
@@ -938,7 +920,7 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   backdrop-filter: none !important;
 }
 
-/* Blur the track header, fading in across its top 22px. */
+/* Feather the track-header blur across its top 22px. */
 .main-view-container__scroll-node-child
 [data-scroll-size-invariant-class][role="presentation"]:has(> [role="presentation"] > [role="row"] > [role="columnheader"])::before {
   content: "" !important;
@@ -953,8 +935,7 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   mask-image: linear-gradient(to bottom, transparent 0, black 22px) !important;
 }
 
-/* Fade the lower blur as the track header becomes sticky.
-   Fall back to the sticky-state class where scroll timelines are unavailable. */
+/* Use Spotify's sticky-state class where scroll timelines are unavailable. */
 .main-view-container__scroll-node-child
 [data-scroll-size-invariant-class][role="presentation"]:has(> [role="presentation"] > [role="row"] > [role="columnheader"])::before {
   opacity: 0;
@@ -971,8 +952,7 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   to { opacity: 1; }
 }
 
-/* Track the grid so the fade continues when the header stops scrolling.
-   The 103px inset combines the 40px sticky offset, 23px gap, and 40px fade. */
+/* 103px inset: 40px sticky offset + 23px gap + 40px fade. */
 @supports (view-timeline-inset: 0px calc(100% - 103px)) and (animation-timeline: --starrynight-lower-sticky) {
   .main-view-container__scroll-node-child
   [role="grid"]:has(> [data-scroll-size-invariant-class][role="presentation"] > [role="presentation"] > [role="row"] > [role="columnheader"]) {
@@ -990,25 +970,25 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   }
 }
 
-/* Release the scrollport stacking context without raising the whole scroller. */
+/* Avoid trapping the sticky backdrop in the scroller stacking context. */
 .main-view-container__scroll-node > :has(> .main-view-container__scroll-node-child) {
   z-index: auto !important;
   will-change: scroll-position !important;
 }
 
-/* Keep this selector separate to avoid nested :has() expressions. */
+/* Keep isolation rules separate to avoid nested :has(). */
 .main-view-container__scroll-node-child {
   isolation: auto !important;
 }
 
-/* Release the playlist wrapper isolation only when a track header is present. */
+/* Release wrapper isolation only where track headers exist. */
 .main-view-container__scroll-node-child > main > section:has(
   [data-scroll-size-invariant-class][role="presentation"] > [role="presentation"] > [role="row"] > [role="columnheader"]
 ) > div {
   isolation: auto !important;
 }
 
-/* Downpurp-specific styles, selected through the color.ini marker. */
+/* Downpurp overrides via the scheme marker. */
 @container style(--spice-downpurp-marker: #010101) {
   
   aside button[aria-label*="Expand"],
@@ -1024,7 +1004,6 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
     background: rgba(var(--spice-rgb-highlight, 133, 84, 240), 0.25) !important;
   }
 
-  /* Downpurp control and icon colors. */
   aside button,
   aside [role="button"],
   :is(.starrynight-top-container, .Root__top-container) aside button,
@@ -1070,7 +1049,6 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
                 0 0 4px 1px rgba(var(--spice-rgb-star-glow, 255, 255, 255), 0.4) !important;
   }
 
-  /* Downpurp search, navigation, and library backgrounds. */
   .main-topBar-searchBar,
   input[data-top-bar-search="true"],
   .main-globalNav-navLink,
@@ -1081,7 +1059,6 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   }
 }
 
-/* Track information stays centered under the circular cover. */
 [data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"]) > :has(a),
 [data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"]) > :has(a) a {
   text-align: center;
@@ -1089,8 +1066,7 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   min-width: 0;
 }
 
-/* Use three columns when a direct Like toggle is present; otherwise keep
-   the widget's flexible layout. */
+/* Three-column layout only when a Like control exists. */
 [data-testid="now-playing-bar"] [data-testid="now-playing-widget-v2"]:has(> [data-testid="cover-art-container"]):has(> * > button[aria-checked]),
 [data-testid="now-playing-bar"] [data-testid="now-playing-widget"]:has(> [data-testid="CoverSlotCollapsed__container"]):has(> * > button[aria-checked]) {
   display: grid !important;
@@ -1123,7 +1099,6 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   margin-inline: 0 !important;
 }
 
-/* Preserve the 32px circular Like button without targeting unrelated controls. */
 [data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"]) button[aria-checked] {
   box-sizing: border-box !important;
   width: 32px !important;
@@ -1144,7 +1119,7 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   border-radius: 50% !important;
 }
 
-/* StarryNight's softer Like-button hover glow, with its full 32px hit area. */
+/* Keep the Like glow separate from other button hovers. */
 [data-testid="now-playing-bar"] :is([data-testid="now-playing-widget-v2"], [data-testid="now-playing-widget"])
   button[aria-checked]:is(:hover, :focus-visible) {
   background: radial-gradient(
@@ -1231,15 +1206,14 @@ button:not([aria-checked]):not([data-testid="control-button-playpause"]):not([da
   pointer-events: none !important;
 }
 
-/* Use a backdrop pseudo-element without changing menu positioning or overflow,
-   which are required for nested submenus. */
+/* Preserve positioning and overflow for nested submenus. */
 ul[role="menu"],
 form:has(> ul[role="menu"]) {
   background-color: transparent !important;
   background-image: none !important;
 }
 
-/* Reuse Spotify's existing positioned wrapper for a non-interactive visual layer. */
+/* Blur the menu backdrop without intercepting input. */
 ul[role="menu"]::before {
   content: "";
   position: absolute;

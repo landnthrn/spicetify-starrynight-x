@@ -1,9 +1,7 @@
-/* StarryNight runtime: compatible component discovery, stars, and player state.
-   The visual layout and colors remain controlled by user.css and color.ini. */
 (() => {
   'use strict';
 
-  // Avoid duplicate observers and player listeners if the theme script reloads.
+  // Tear down any previous instance before reconnecting.
   const runtimeKey = '__starrynightRuntime';
   window[runtimeKey]?.destroy?.();
 
@@ -24,7 +22,7 @@
   const random = (min, max) => Math.random() * (max - min) + min;
 
   function findRoot() {
-    // Prefer the navigation ID; fall back to the legacy root class.
+    // Fall back to the legacy root if navigation is unavailable.
     return document.getElementById('global-nav-bar')?.parentElement ||
       document.querySelector('.Root__top-container');
   }
@@ -68,7 +66,6 @@
    */
 
   function createSky(container) {
-    // Batch star creation while retaining the existing density and timings.
     document.querySelector('.starrynight-canvas')?.remove();
     let sky = container.querySelector(':scope > .starrynight-bg-container');
     if (!sky) {
@@ -126,7 +123,7 @@
     measureFrame = requestAnimationFrame(() => {
       measureFrame = 0;
       if (!root?.isConnected || !sidebarTarget?.isConnected) return;
-      // Measure current width instead of using a queued observer entry.
+      // Read the current width; queued observer measurements can be stale.
       const width = Math.round(sidebarTarget.getBoundingClientRect().width);
       if (width === lastWidth) return;
       lastWidth = width;
@@ -175,8 +172,7 @@
       nextRightbar?.classList.add('starrynight-rightbar');
     }
 
-    // Prefer the real right panel. When closed it may be unmounted, leaving
-    // only Spotify's narrow peek element in the right-sidebar grid slot.
+    // The right panel may unmount when closed; fall back to its peek slot.
     const target = panel && nextRightbar?.contains(panel)
       ? panel
       : nextRightbar?.firstElementChild || nextRightbar;
@@ -201,7 +197,7 @@
     root.classList.add('starrynight-top-container');
     createSky(root);
     rootObserver = new MutationObserver((records) => {
-      // Ignore unrelated track-list and sky mutations when already connected.
+      // Ignore unrelated DOM mutations once both panels are connected.
       if (!playbarSlot || !rightbarSlot || records.some(({ target }) =>
         target === root ||
         rightbarSlot?.contains(target) ||
@@ -225,7 +221,7 @@
     if (destroyed || !player) return;
     try {
       document.body.classList.toggle('starrynight-is-playing', !!player.isPlaying());
-    } catch (_) { /* The player API may initialize after the DOM. */ }
+    } catch (_) { /* Player not ready. */ }
   }
 
   function onSongChange() {
@@ -247,7 +243,7 @@
   }
 
   const documentObserver = new MutationObserver(() => {
-    // Detect root replacement without traversing unrelated nested nodes.
+    // Detect root replacement without scanning the nested DOM.
     const nav = document.getElementById('global-nav-bar');
     if (!root?.isConnected || (nav && nav.parentElement !== root)) scheduleRefresh();
   });
