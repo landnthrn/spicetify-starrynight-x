@@ -405,6 +405,22 @@ body.starrynight-sidebar-collapsed :is(.starrynight-top-container, .Root__top-co
     background-color: var(--theme-row-selected) !important;
 }
 
+/* Encore cards paint hover surfaces on ::after. */
+:is(#main-view, #Desktop_LeftSidebar_Id, #Desktop_PanelContainer_Id)
+  [data-encore-id="card"]:hover::after {
+    background-color: var(--theme-row-hover) !important;
+}
+
+/* Other list rows use an overlay; Library rows are handled above. */
+:is(#main-view, #Desktop_PanelContainer_Id, #search-dropdown)
+  [data-encore-id="listRow"]:hover::after {
+    background-color: var(--theme-row-hover) !important;
+}
+:is(#main-view, #Desktop_PanelContainer_Id, #search-dropdown)
+  [data-encore-id="listRow"]:hover {
+    background-color: transparent !important;
+}
+
 
 
 /* Vertical player sizing with a 450px baseline and 280–420px panel constraints. */
