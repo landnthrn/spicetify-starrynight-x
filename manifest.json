@@ -1,22 +1,36 @@
 {
   "name": "StarryNight / Repair New Version",
-  "description": "Versión reparada y optimizada de StarryNight por carlitos999yt: disco giratorio adaptativo sin cortes, lluvia de estrellas clásica y parpadeo original, contracción sincronizada del panel y compatibilidad total con letras.",
+  "description": "An enhanced StarryNight theme for Spotify with animated stars, transparency, blur effects, and multiple color schemes.",
   "preview": "images/base.png",
   "readme": "README.md",
   "usercss": "user.css",
   "schemes": "color.ini",
   "include": [
-    "https://carlitos999yt.github.io/StarryNight-Repair-New-Version/theme.js"
+    "https://landnthrn.github.io/spicetify-starrynight-x/theme.js"
   ],
   "authors": [
     {
-      "name": "Brandon Chen, Julissa Laignelet (Original), carlitos999yt (Repair New Version)",
-      "url": "https://github.com/carlitos999yt"
+      "name": "Brandon Chen",
+      "url": "https://github.com/b-chen00"
+    },
+    {
+      "name": "Julissa Laignelet",
+      "url": "https://github.com/laignelet16"
+    },
+    {
+      "name": "landnthrn",
+      "url": "https://github.com/landnthrn"
+    },
+    {
+      "name": "Carlitos999yt",
+      "url": "https://github.com/Carlitos999yt"
     }
   ],
+
   "tags": [
-    "latest",
-    "repaired",
-    "carlitos999yt"
+    "dynamic",
+    "animated",
+    "gradient",
+    "customizable"
   ]
 }
