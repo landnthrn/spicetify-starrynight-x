@@ -321,7 +321,7 @@ body.starrynight-sidebar-collapsed :is(.starrynight-top-container, .Root__top-co
   --bgColor: transparent !important;
 }
 
-:is(.starrynight-top-container, .Root__top-container) [style*="--background-base"]:not(.e-10860-legacy-box):not(.e-10860-legacy-box *):not(:is([data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper), .r8bczAWCEgb9_L0iyIcc, .IfBZ5VdI_2nwDMl4H6Yh)),
+:is(.starrynight-top-container, .Root__top-container) [style*="--background-base"]:not(.e-10860-legacy-box):not(.e-10860-legacy-box *):not(:is([data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper), .main-actionBarBackground-background)),
 :is(.starrynight-top-container, .Root__top-container) [style*="--background-base"]:not(.e-10860-legacy-box):not(.e-10860-legacy-box *)::after {
   background-color: transparent !important;
   background-image: none !important;
@@ -1059,24 +1059,42 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   }
 }
 
-/* Native banner visibility: playlists, albums, podcasts, artists */
-
-/* Let Spotify's native banner gradients show through the scroll surfaces, action bar,
-   and playlist toolbar. Disabled layers are fully masked, revealing StarryNight's sky. */
-#main-view:has([data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper)):has(.r8bczAWCEgb9_L0iyIcc)
+/* Keep scroll surfaces clear so the artwork gradients remain visible. */
+#main-view:has([data-testid="entity-header"])
   :is(.main-view-container,
       .main-view-container__scroll-node,
       .main-view-container__scroll-node-child,
       .playlist-playlist-playlistContent,
       .main-actionBar-ActionBar,
-      .playlist-playlist-playlistContent > .contentSpacing) {
+      .playlist-playlist-playlistContent > .contentSpacing),
+#main-view [data-testid="playlist-page"] > .contentSpacing {
   background-color: transparent !important;
 }
 
-/* Mask the native artwork and lower-gradient layers using their existing targets.
-   Alpha mask: 0 hides the layers; 1 reveals Spotify's original colors. */
-#main-view:has([data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper)):has(.r8bczAWCEgb9_L0iyIcc)
-  :is([data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper), .r8bczAWCEgb9_L0iyIcc) {
+/* Extend native artwork gradients below the entity header. */
+#main-view [data-testid="entity-header"]:not(:has(> .main-entityHeader-overlay))
+  > .main-entityHeader-backgroundColor {
+  height: calc(100% + 232px) !important;
+  max-height: none !important;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)) 0%,
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)) 37%,
+    transparent 100%
+  ) !important;
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)) 0%,
+    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)) 37%,
+    transparent 100%
+  ) !important;
+  mask-mode: alpha !important;
+  pointer-events: none !important;
+}
+
+/* Liked Songs and Your Episodes use separate banner layers. */
+#main-view [data-testid="entity-header"]:has(> .main-entityHeader-overlay)
+  > .main-entityHeader-backgroundColor {
   -webkit-mask-image: linear-gradient(
     rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)),
     rgba(255, 255, 255, var(--theme-color-banners-enabled, 0))
@@ -1088,36 +1106,10 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   mask-mode: alpha !important;
 }
 
-/* Liked Songs and Your Episodes banner visibility */
-
-/* Both pages use the same native banner layers, but different page containers.
-   Use the distinctive lower gradient to scope their shared transparency rules. */
-#main-view:has(.IfBZ5VdI_2nwDMl4H6Yh)
-  :is(.main-view-container,
-      .main-view-container__scroll-node,
-      .main-view-container__scroll-node-child,
-      .main-actionBar-ActionBar) {
-  background-color: transparent !important;
-}
-
-/* Hide or reveal both upper artwork layers with the CSS opacity setting. */
-#main-view:has(.IfBZ5VdI_2nwDMl4H6Yh)
-  [data-testid="entity-header"] > div:not(.main-entityHeader-contentWrapper) {
-  -webkit-mask-image: linear-gradient(
-    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)),
-    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0))
-  ) !important;
-  mask-image: linear-gradient(
-    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)),
-    rgba(255, 255, 255, var(--theme-color-banners-enabled, 0))
-  ) !important;
-  mask-mode: alpha !important;
-}
-
-/* When enabled, fade the lower gradient smoothly into StarryNight's sky.
-   When disabled, the zero-alpha mask makes it completely transparent. */
-#main-view:has(.IfBZ5VdI_2nwDMl4H6Yh)
-  .IfBZ5VdI_2nwDMl4H6Yh {
+/* Darken the lower banner without replacing its native color. */
+#main-view :is([data-testid="playlist-page"], [data-testid="your-episodes-page"])
+  :is(.main-actionBarBackground-background) {
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)) !important;
   -webkit-mask-image: linear-gradient(
     to bottom,
     rgba(255, 255, 255, var(--theme-color-banners-enabled, 0)) 0%,
@@ -1129,6 +1121,7 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
     transparent 100%
   ) !important;
   mask-mode: alpha !important;
+  pointer-events: none !important;
 }
 
 /* Use a backdrop pseudo-element without changing menu positioning or overflow,
