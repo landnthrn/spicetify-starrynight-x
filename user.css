@@ -19,6 +19,13 @@
     in srgb, var(--theme-header-color) var(--theme-header-tint-opacity), transparent
   );
 
+  /* Highlights */
+  --theme-highlight-hover-opacity: 9%;
+  /* Extra hover tint on Home tiles */
+  --theme-highlight-home-extra-opacity: 6%;
+
+  --theme-row-hover: color-mix(in srgb, var(--spice-highlight) var(--theme-highlight-hover-opacity), transparent);
+  --theme-hover-extra-tint: color-mix(in srgb, var(--spice-highlight) var(--theme-highlight-home-extra-opacity), transparent);
 }
 
 .os-scrollbar {
@@ -355,8 +362,19 @@ body.starrynight-sidebar-collapsed :is(.starrynight-top-container, .Root__top-co
   background-color: transparent !important;
 }
 
-[role="row"]:hover {
-  background-color: rgba(255, 255, 255, 0.08) !important;
+/* Highlights */
+/* Clear the Library row overlay to avoid stacking two hover tints. */
+#Desktop_LeftSidebar_Id .main-yourLibraryX-listItem:hover {
+    background-color: transparent !important;
+}
+#Desktop_LeftSidebar_Id .main-yourLibraryX-listItem:hover [data-encore-id="listRow"] {
+    background-color: var(--theme-row-hover) !important;
+}
+#Desktop_LeftSidebar_Id .main-yourLibraryX-listItem:hover [data-encore-id="listRow"]::after {
+    background-color: transparent !important;
+}
+#main-view .main-trackList-trackListRow:hover {
+    background-color: var(--theme-row-hover) !important;
 }
 
 
@@ -935,10 +953,6 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   }
 
   
-  .view-homeShortcutsGrid-shortcut:hover,
-  [role="row"]:hover {
-    background-color: rgba(var(--spice-rgb-highlight, 133, 84, 240), 0.08) !important;
-  }
 
   
   [data-testid="now-playing-bar"] [data-testid="cover-art-button"] img,
