@@ -247,14 +247,29 @@ button[aria-label*="Ocultar"] svg {
   visibility: visible !important;
 }
 
-aside button:hover,
-aside [role="button"]:hover,
-.main-nowPlayingBar-extraControls button:hover {
-  background-color: rgba(255, 255, 255, 0.2) !important;
-  border-radius: 50% !important;
+/* Normalize sidebar hovers without changing intentional expand controls. */
+#Desktop_PanelContainer_Id button:where(:not([aria-label*="Expand"]):not([aria-label*="Expandir"]):not([aria-label*="Mostrar"])):hover,
+#Desktop_PanelContainer_Id [role="button"]:not(button):hover {
+  background-color: transparent !important;
+  background-image: none !important;
 }
 
-/* Scope inline-background overrides to the right panel, excluding lyrics. */
+/* Modern tertiary controls retain a subtle highlight. */
+#Desktop_PanelContainer_Id button[data-encore-id="button"]:hover {
+  background-color: color-mix(in srgb, var(--spice-highlight) 10%, transparent) !important;
+}
+
+/* Preserve pill-shaped controls; text headings and clickable rows stay square. */
+#Desktop_PanelContainer_Id button:is(.e-101040-legacy-button, .e-101040-button):hover {
+  border-radius: 9999px !important;
+}
+
+#Desktop_PanelContainer_Id .main-nowPlayingView-sectionHeader button:hover,
+#Desktop_PanelContainer_Id [role="button"]:not(button):hover {
+  border-radius: 0 !important;
+}
+
+/* Exclude lyrics from right-panel background resets. */
 .starrynight-rightbar aside section:not([data-testid*="lyric"]):not(:has([data-testid*="lyric"])),
 .starrynight-rightbar aside article:not([data-testid*="lyric"]):not(:has([data-testid*="lyric"])),
 .starrynight-rightbar aside [data-testid="card-click-handler"],
@@ -1039,12 +1054,6 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   button[aria-label*="Ocultar"] svg {
     fill: var(--spice-text, #ffffff) !important;
     color: var(--spice-text, #ffffff) !important;
-  }
-
-  aside button:hover,
-  aside [role="button"]:hover,
-  .main-nowPlayingBar-extraControls button:hover {
-    background-color: rgba(var(--spice-rgb-highlight, 133, 84, 240), 0.2) !important;
   }
 
   aside .main-nowPlayingView-trackInfo *,
