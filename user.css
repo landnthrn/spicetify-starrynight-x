@@ -732,17 +732,22 @@ Pure CSS Shooting Star Animation Effect Copyright (c) 2021 by Delroy Prithvi (ht
   background-color: #00000000 !important;
 }
 
-/* Keep the Home artwork banner transparent without affecting shortcuts. */
-#main-view .kMaYBahSBLOnErF7DLR2 {
+/* Hide the Home artwork backdrop independently of banner visibility. */
+#main-view .main-home-homeHeader {
+  background: transparent !important;
+  background-image: none !important;
+}
+
+#main-view .main-home-filterChipsContainer {
+  background: transparent !important;
   background-color: transparent !important;
   background-image: none !important;
 }
 
-/* Blur the Home sticky header's fading background. */
-#main-view .jTuahgNncRCCfJfiJwQi > :first-child {
-  background: transparent !important;
-  -webkit-backdrop-filter: blur(24px) !important;
-  backdrop-filter: blur(24px) !important;
+#main-view .main-home-filterChipsContainer > :first-child {
+  background: var(--theme-header-background) !important;
+  -webkit-backdrop-filter: var(--theme-header-blur) !important;
+  backdrop-filter: var(--theme-header-blur) !important;
 }
 
 /* Overlap the top-bar and track-header blurs without shifting their content. */
