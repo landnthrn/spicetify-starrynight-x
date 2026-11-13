@@ -433,6 +433,22 @@ ul[role="menu"] [data-encore-id="listRow"]:hover::after {
     background-color: var(--theme-row-hover) !important;
 }
 
+/* Tint interactive sidebar rows, not text-only artist links. */
+#Desktop_PanelContainer_Id .main-nowPlayingView-section a:not(:has(> [data-encore-id="text"])):hover,
+#Desktop_PanelContainer_Id .main-nowPlayingView-section ul > li:hover > div {
+    background-color: var(--theme-row-hover) !important;
+}
+
+#Desktop_PanelContainer_Id .main-nowPlayingView-section a:has(> [data-encore-id="text"]):hover {
+    background-color: transparent !important;
+    background-image: none !important;
+}
+
+#Desktop_PanelContainer_Id .main-nowPlayingView-section a:has(> [data-encore-id="text"]):hover > [data-encore-id="text"] {
+    text-decoration: underline !important;
+    text-underline-offset: 2px;
+}
+
 /* Keep featured-card artwork under the hover tint. */
 #main-view [class*="BigCard_"]:hover {
     box-shadow: inset 0 0 0 999px var(--theme-hover-extra-tint) !important;
